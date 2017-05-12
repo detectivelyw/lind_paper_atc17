@@ -1,0 +1,93 @@
+\section{Goals and Threat Model}
+\label{sec.motivation-and-background}
+
+In this section, we define the scope of our efforts. We also briefly note why
+this study does not evaluate a few existing design schemes.
+
+\noindent
+\textbf{Goals.}
+Ultimately, our goal is to help designers to
+create systems that allow untrusted programs to 
+run on an unpatched and vulnerable host OSes 
+ without triggering vulnerabilities that attackers could exploit.
+Developing effective defenses for the host OS kernel is essential as kernel code
+can expose privileged access to attackers that could lead to a system take-over.
+
+Our hypothesis was that OS kernel code paths that are frequently used receive
+more
+attention and therefore are less likely to contain security vunlnerabilities.
+Our approach, then, was to test this hypothesis and, if validated, determine
+if this observation could be exploited by designers to build 
+virtualization systems, such as guest OSVMs, system call interposition modules
+or library OSes, that force untrusted applications to keep on commonly-used kernel
+code paths and thereby improve security.
+
+
+
+\noindent
+\textbf{Threat model.}
+%We start by acknowledging that
+When an attack attempt is staged
+on a host OS in a virtualization system,
+%Furthermore, %we anticipate that
+the exploit can be done either directly or indirectly.
+In a direct exploit, the attacker accesses a vulnerable portion of the host OS's kernel
+using a crafted attack code. In an indirect exploit,
+the attacker first takes advantage of a vulnerability in the virtualization system itself
+(for example, a buffer-over-flow vulnerability)
+to escape the VM's containment. Once past the containment, the attacker would be able to run arbitrary code
+in the host OS.
+The secure virtualization system design we propose
+in Section~\ref{sec.design} can prevent both types of attacks effectively.
+
+Based on the goals mentioned above, we make the following assumptions about the
+potential threats our system could face:
+
+\begin{itemize}\setlength\itemsep{0em}
+
+\item The attacker possesses knowledge of one or more unpatched
+vulnerability in the host OS.
+
+\item The attacker can execute any code in the secure
+virtualization system.
+
+\item If the attack program can trigger a vulnerability in any privileged
+code, whether in the host OS or the secure virtualization system, the attacker
+is then considered successful in compromising the system.
+
+\end{itemize}
+
+\noindent
+\textbf{Exclusion.}
+It should be noted that our study intentionally excludes %several existing
+%approaches to virtualization systems. We considered these techniques
+%out of scope due to differences in hardware and software requirements.
+%Primarily we chose to exclude
+a comparison with solutions that do not run on top of a
+full-fledged privileged OS, such as
+%a virtualization system that uses
+a bare-metal hypervisor~\cite{Xen-03, VMWare-Server} or
+hardware-based virtualization~\cite{IntelVT, keller2010nohype}.
+While our techniques can potentially apply to those
+systems, a direct comparison is not possible since they have different
+ways of accessing hardware resources, and require different measuring approaches.
+%would be difficult to perform due to
+%tracing techniques.
+%These devices are dependent on the underlying hardware, and do not interact
+%with a privileged OS kernel. Such differences in both structure and function
+%make it difficult to directly compare these techniques to our proposed model.
+
+In addition, we exclude evaluation and direct comparison with full virtualization virtual machines,
+such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}.
+Such systems simulate hardware to allow an unmodified guest OS to run. The goal
+of our design is to substitute the large and complex TCB required for a guest OS, with a single-process
+program with a small TCB and a secure isolated environment. With different goals, our proposed design is 
+a fundamentally different approach from full virtualization. As a result, direct measurement and comparison between full virtualization
+and our design is
+beyond the scope of this work.
+
+%Yiwen: cut
+%To build a VM to resist zero-day vulnerabilities effectively, we need to know which
+%portions of the kernel may be more prone to exploitation. Our first step is to
+%define and test a security metric that can quantitatively measure how bugs and
+%vulnerabilities are distributed in the host OS kernel.
