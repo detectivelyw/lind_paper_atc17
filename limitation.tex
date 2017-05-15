@@ -16,10 +16,16 @@ caused by a race condition, or that involve defects in the internal kernel data
 structures, or ones that require complex triggering conditions across multiple kernel
 paths, may not be immediately found using our metric. As we continue to refine
 our metric, we will look to also evolve our evaluation
-criteria to find and protect against more complex types of bugs.
+criteria to find and protect against more complex types of bugs. 
 In the meantime, avoiding the triggering of this initial set of bugs
 through the use of our \lip design can address the security
-needs of a significant segment of users.
+needs of a significant segment of users. 
+
+Another limitation is that our current metric can only conclude that certain lines of code in 
+the kernel were reached or not, which is a necessary but may not be a sufficient condition 
+to exploit a bug. While a stronger conclusion about the bug triggering condition would be ideal, 
+it would be hard to achieve using our quantitative metric, and would require a complicated manual process. 
+Therefore, we will have to leave this for future work. \yiwen{Maybe remove the last sentence about future work.} 
 
 %\textbf{Future work.}
 %While our experiments were limited to the Linux kernel 3.14.1, our future work
