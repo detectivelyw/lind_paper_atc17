@@ -116,6 +116,7 @@ a secure functionality re-creation design should try to deliberately avoid kerne
 We discuss this approach in detail next.
 
 \subsection{Lock-in-Pop: Staying on the Beaten Path}
+\label{lock-in-pop}
 
 %As discussed above, a weakness of the previous approaches is the inevitable contact
 %between the privileged kernel code and an untrusted application.
@@ -222,7 +223,7 @@ modified NaCl to instead forward these calls to our SafePOSIX re-creation
 
 To build an API that can access the safe parts of the underlying kernel while
 still supporting existing applications, we need two things. First, we need a
-restricted sandbox that only allows access to commonly-used kernel paths. We
+restricted sandbox kernel that only allows access to popular kernel paths. We
 used Seattle's Repy~\cite{Repy-10} sandbox to perform this task. Second, we
 have to provide complex system functions to user programs,
 for which we implemented the widely accepted standard POSIX interface on top of Repy, 
@@ -236,7 +237,14 @@ kernel, and its minimal set of system call APIs needed to build general
 computational functionality. Repy allows access only to the popular portions of
 the OS kernel through 33 basic API functions, including 13 network functions, 6
 file functions, 6 threading functions, and 8 miscellaneous functions (Table
-\ref{table:RepyKernel})~\cite{Repy-10, RepyKernel}.
+\ref{table:RepyKernel})~\cite{Repy-10, RepyKernel}. 
+
+Repy is one possible implementation of the sandbox kernel in our \lip design. 
+It follows the basic design principles discussed in Section \ref{lock-in-pop}.
+Repy sandbox kernel starts with basic building-block functions and tries to be conservative. 
+It was an approximation of leveraging the ``popular paths'', rather than a perfect match. 
+As reported in our evaluation (Section~{{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}), 
+Repy accessed a subset (around 70\% to 80\%) of the ``popular paths''. 
 
 \begin{table}
 \centering
