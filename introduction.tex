@@ -1,75 +1,25 @@
 \section{Introduction}
 \label{sec.introduction}
 
-%\cappos{Paragraph: Bad guys (hackers, NSA, etc.) are using zero day bugs in
-%the kernel to do bad things...}
-%For many years system designers and developers have had to deal with a common security issue --
-%how to defend against threats hidden within the system's own code. Despite
-% decades of effort, researchers still frequently uncover new flaws in operating
-% system kernels. Such flaws are dangerous because, if triggered by an untrusted
-% program, these bugs can lead to such security threats as privilege escalation
-% [CVE-2016-0728], [CVE-2015-8660], denial of service [CVE-2015-8539], [CVE-2015-5364],
-%  and memory corruption [CVE-2014-9529].
-%
-The number of attacks in which zero-day vulnerabilities have been exploited has more than
-doubled from 2014 to 2015~\cite{zero-day}. Skilled hackers can find a security
-flaw in a system and use it to hold the system's users hostage , e.g., by
-gaining root access and compromising the host~\cite{linux-0day}. Similarly, zero-day
-vulnerabilities can be exploited~\cite{fbi-0day} or held back~\cite{nsa-0day} by government
-agencies, thus rendering millions of devices vulnerable.
-%for national security reasons
-%\cappos{Must be OS kernel zero days.  Firefox
-%doesn't matter and privacy isn't the biggest concern.  It's someone breaking
-%into systems due to a flaw like this.}
-%It is difficult to defend against these new and
-%unknown vulnerabilities, leading to an arms race between hackers and software
-%developers.
-%
+The number of attacks involving the exploitation of zero-day vulnerabilities more than doubled 
+from 2014 to 2015 \cite{zero-day}. Skilled hackers can find a security flaw in a system and use it to hold the system's users hostage, e.g., 
+by gaining root access and compromising the host \cite{linux-0day}. Similarly, zero-day
+vulnerabilities can be exploited \cite{fbi-0day} or their presence not be acknowledged \cite{nsa-0day} 
+by government agencies, thus rendering millions of devices vulnerable.
 
-In theory, running a program in an operating-system-level virtual machine (OSVM) like Docker~\cite{Docker} or LXC~\cite{LXC} should
-prevent it from triggering bugs in the host OS kernel.  However, to be
-effective, the isolation provided by such systems must meet two challenging criteria. First, the OSVM's
-software must not contain any bugs that could allow the program to escape the
-machine's containment and interact directly with the host OS.
-Unfortunately, these issues are very common in OSVMs. 
-%Virtualbox reports more than 40 such vulnerabilities~\cite{Virtualbox-Vulnerabilities} 
-%and more than 100 bugs have been found in VMware Workstation~\cite{VMWare-Vulnerabilities}. 
-Since 2014, 14 CVE vulnerabilities have been confirmed for Docker~\cite{Docker-Vulnerabilities}. 
-Given the large amount of complex code needed for such a system, it is understandable that flaws could occur,
-leaving tens of millions of user machines at risk~\cite{linux-0day}.
+In theory, running a program in an operating system-level virtual machine (OSVM) like Docker \cite{Docker} or LXC \cite{LXC} should
+prevent bugs in the host OS kernel from triggering. 
+However, the isolation provided by such systems is not the whole answer and faces some significant drawbacks. 
+To be effective, OSVM's software must not contain any bugs that could allow the program to escape the machine's containment 
+and interact directly with the host OS. 
+Unfortunately, these issues are very common in OSVMs, with 14 CVE vulnerabilities confirmed for Docker \cite{Docker-Vulnerabilities} since 2014. 
+The large amount of complex code needed to run such a system increases the odds that flaws will be present, and, in turn, 
+that tens of millions of user machines could be at risk \cite{linux-0day}.
+Furthermore, isolation will not work if a malicious program can access even a small portion of the host OS's kernel 
+that contains a zero-day flaw \cite{CVE-2016-5195}. 
+Both of these reveal the key underlying weakness in designing OSVM systems-- a lack of information 
+as to which parts of the host kernel can be safely exported to user programs. 
 
-Secondly, isolation will not work if a malicious
-program can access a portion of the host OS's kernel that contains a
-zero-day flaw \cite{CVE-2016-5195}. This may occur even if the containment of the OSVM is
-working as designed. 
-Many system calls made within an OSVM eventually
-result in calls in the host OS (e.g., network I/O from the guest
-OSVM results in network I/O by the host OS kernel). If one of these paths in
-the OS kernel contains a zero-day security bug, the attacker
-may be able to trigger and exploit it. 
-Both of the challenges revealed a key weakness we had when designing OSVM systems, 
-that is we lack information about which parts of the host kernel can be safely exported to user programs. 
-And we need a metric to help us assess the security of OSVM systems. 
-
-%aspect of this isolation is preventing the program from triggering bugs
-%in the host OS kernel or in the OSVM itself.  However,
-
-%The search for an ideal way to protect kernel code has been hampered by limited
-%knowledge of the security impact of its interaction with user programs.
-%A number of strategies have been attempted. One prevailing belief was that virtual
-%machines could provide enough isolation to execute programs safely.
-%However, when Virtualbox reports 40 vulnerabilities \cite{Virtualbox-Vulnerabilities},
-% and more than 100 bugs have been found in VMware Workstation,
-%it suggests that isolation alone may not be enough. Other researchers have looked
-% to the development of metrics capable of pinpointing bugs, and,
-%securing just those vulnerable areas\cite{PittSFIeld, ozment2006milk}. As these
-%examples indicate, the design of secure systems has been somewhat, hit-or-miss.�
-% Observations may lead to
-% the reduction of specific threats, but not to a reproducible, broadly applicable,
-%quantitative design solution.
-
-%With this paper, we move one step closer to designing secure OSVM systems that are
-%resilient to zero-day flaws. 
 In this paper, we propose a new security metric, called ``popular paths'', that helps devise designs for secure OSVM systems that are
 resilient to zero-day flaws. 
 We discovered that security bugs in the Linux kernel have strong correlation with popular paths. 
