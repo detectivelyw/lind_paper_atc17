@@ -146,25 +146,29 @@ an application needs. For example, an application may store files in directories
 The sandbox kernel may provide a much simpler abstraction (e.g., a block storage abstraction),
 so long as the strictly needed functionality (e.g., persistent storage) is provided.
 
-In our \lip design, one key component is the sandbox kernel (\ding{172} in Figure \ref{fig:design_safe_reimplementation}), 
+In our \lip design, a key component is the sandbox kernel (\ding{172} in Figure \ref{fig:design_safe_reimplementation}), 
 which controls access to the underlying host kernel. 
-Constructing the sandbox kernel does not rely on any specific technique or programming language. 
-The principle of the design is to include only simple and necessary system calls with basic flags, and then we can check and verify 
-if only ``popular paths'' were used.  
+Constructing the sandbox kernel is not dependent on any specific technique or programming language. 
+Instead, the sandbox kernel follows a central design principle to include only simple and necessary system calls with basic flags, 
+which can be checked to verify that only ``popular paths'' were used.  
 The sandbox kernel should start with building-block functions to first form a minimum set of system calls. 
-For example, for network programs, opening a TCP connection is an essential function. 
-And we checked that lines of kernel code, such as lines in \texttt{void tcp\_init\_sock(struct sock *sk)}, that correspond 
-with opening TCP sockets, were part of ``popular paths''. Thus, essential functions, such as \texttt{open\_tcp\_connection()} should be 
-included in the sandbox kernel. Examples of other necessary functions are \texttt{file.open, file.close, file.read, file.write} for file system 
-functions, and \texttt{create\_thread, create\_lock, lock.acquire, lock.release} for threading function. 
-As the system tries to be more compatible and allow more user applications to run, decisions will be made to include more 
-system calls in the sandbox kernel. Ideally, there should be a sandbox kernel that tries to use the ``popular paths'' in a maximum way. 
-However, practically this can be really hard, since there is not a perfect mapping from the lines of code in the underlying kernel to the 
-system call interface. The best we can do is to try to achieve an approximation of leveraging the ``popular paths''. 
-And to put security as priority, the designed sandbox kernel should use a subset of the ``popular paths''. 
-For systems with different purposes, trade-offs can certainly be made to include part of the ``unpopular paths'' to accommodate applications. 
-However, further discussion on this topic is beyond the scope of this paper. 
-While restricting the system call interface is a big hammer for limiting access to popular paths in the kernel, 
+To give one example, for network programs, opening a TCP connection would be considered an essential function. 
+So, we would check that lines of kernel code, such as lines in \texttt{void tcp\_init\_sock(struct sock *sk)}, that correspond 
+with opening TCP sockets, were included in ``popular paths'' for that system, and the \texttt{open\_tcp\_connection()} function 
+would be included in the sandbox kernel. 
+Examples of other necessary functions are \texttt{file.open, file.close, file.read, file.write} for file system 
+functions, and \texttt{create\_thread, create\_lock, lock.acquire, lock.release} for threading functions. 
+
+As a system tries to be more compatible and allow more user applications to run, 
+its designers will need to make some decisions to include more system calls in the sandbox kernel. 
+Ideally, it would be better if a sandbox kernel could maximize its use of the ``popular paths.'' 
+However, practically this can be difficult, since there is no perfect mapping from the lines of code in the underlying kernel to the 
+system call interface. The best we can do is to try to achieve an approximation of leveraging the ``popular paths.'' 
+And, in order to make security our priority, the designed sandbox kernel should use only a subset of the ``popular paths''. 
+For systems where security is not as critical, trade-offs can certainly be made to include some ``unpopular paths'' to accommodate applications. 
+Further discussion of this trade-off is beyond the scope of this paper, 
+though we acknowledge it is an issue that should be addressed as \lip is deployed. 
+While restricting the system call interface is a big hammer for limiting access to ``popular paths'' in the kernel, 
 we believe that this is the best choice available, given that we do not want to require modification to the kernel, and 
 would like to allow users to easily run their applications without much extra efforts. 
 
@@ -240,12 +244,12 @@ the OS kernel through 33 basic API functions, including 13 network functions, 6
 file functions, 6 threading functions, and 8 miscellaneous functions (Table
 \ref{table:RepyKernel})~\cite{Repy-10, RepyKernel}. 
 
-Repy is one possible implementation of the sandbox kernel in our \lip design. 
-It starts with basic building-block functions and tries to be conservative. 
-Repy was designed and implemented before our ``popular paths'' study. 
-It was not a perfect match to the ``popular paths'', but was verified to use only part of the ``popular paths''. 
+Repy is only one possible implementation of the sandbox kernel built for our \lip design. 
+It was chosen because it starts with basic building-block functions and tries to be conservative. 
+Repy was designed and implemented before our ``popular paths'' study, and so it was not a perfect match, 
+but it was verified as using only part of the ``popular paths.'' 
 As reported in our evaluation (Section~{{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}), 
-Repy accessed a subset (around 70\% to 80\%) of the ``popular paths''. 
+Repy accessed a subset (around 70\% to 80\%) of the ``popular paths.'' 
 
 \begin{table}
 \centering
