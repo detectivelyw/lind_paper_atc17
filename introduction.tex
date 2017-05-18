@@ -20,28 +20,18 @@ that contains a zero-day flaw \cite{CVE-2016-5195}.
 Both of these reveal the key underlying weakness in designing OSVM systems-- a lack of information 
 as to which parts of the host kernel can be safely exported to user programs. 
 
-In this paper, we propose a new security metric, called ``popular paths'', that helps devise designs for secure OSVM systems that are
-resilient to zero-day flaws. 
-We discovered that security bugs in the Linux kernel have strong correlation with popular paths. 
-We start with the proposition that kernel code found in popular paths, associated with frequently-used programs,
-has less potential risk of bugs than code in less-used parts of the kernel.
-Our intuition behind this proposition is that bugs in the popular paths are
-more frequently found in software testing, because of the numerous times they are executed by
-diverse pieces of software.
-We performed a quantitative analysis of resilience
-to flaws in two versions of the Linux kernel (version 3.13.0 and version 3.14.1), and
-found that only about 3\% of the bugs were present in popular code paths,
-despite these paths accounting for about one third of the total reachable
-kernel code. 
-We also compared our ``popular paths'' metric against two other metrics, ``code age'' metric, and ``device drivers'' metric, 
-and demonstrated that our ``popular paths'' metric works best (Section~{\ref{Verification-of-Hypothesis}}).  
-This key information inspired the idea that 
-if we could design virtual machines that only use popular kernel paths (\lip), 
-it would greatly increase resilience to zero-day bugs in the host OS kernel. 
-%When we ran the same study on the same Linux kernel versions
-%using two other metrics
-%(Chou \cite{PittSFIeld} and Ozment \cite{ozment2006milk}),
-%we found them less effective at predicting the location of zero-day bugs.
+Several attempts have been made to find a reliable metric to pinpoint where bugs are most likely to be in kernel code. 
+A number of previous studies have suggested that older code may be more vulnerable than new code \cite{ozment2006milk}  
+or that certain parts (such as device drivers) of the kernel \cite{PittSFIeld} may be more bug-prone than others. 
+To these hypotheses, we add a new security metric idea, called ``popular paths.'' 
+Positing that bugs in the popular paths, associated with frequently-used programs, are more frequently found in software testing 
+because of the numerous times they are executed by diverse pieces of software, we proposed that kernel code found in these paths, 
+would have less chance of containing bugs than code in less-use parts of the kernel. 
+We performed a quantitative analysis of resilience to flaws in two versions of the Linux kernel (version 3.13.0 and version 3.14.1), 
+and found that only about 3\% of the bugs were present in popular code paths, 
+despite these paths accounting for about one-third of the total reachable kernel code. 
+When we tested our ``popular paths'' metric against the two aforementioned ``code age'' and ``device drivers'' metrics, 
+we found our ``popular paths'' metric was much more effective (Section~{\ref{Verification-of-Hypothesis}}). 
 
 Demonstrating that security bugs are concentrated on unpopular
 code paths is only the first step to arguing that this leads to useful and
