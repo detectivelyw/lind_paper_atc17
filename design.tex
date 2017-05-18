@@ -149,9 +149,10 @@ so long as the strictly needed functionality (e.g., persistent storage) is provi
 In our \lip design, one key component is the sandbox kernel (\ding{172} in Figure \ref{fig:design_safe_reimplementation}), 
 which controls access to the underlying host kernel. 
 Constructing the sandbox kernel does not rely on any specific technique or programming language. 
-The way we tried to design the sandbox kernel was to follow the principle of least privilege. 
-The sandbox kernel should start with building-block functions to first form a minimum set of system calls, which can be verified to 
-use only ``popular paths''. For example, for network programs, opening a TCP connection is an essential function. 
+The principle of the design is to include only simple and necessary system calls with basic flags, and then we can check and verify 
+if only ``popular paths'' were used.  
+The sandbox kernel should start with building-block functions to first form a minimum set of system calls. 
+For example, for network programs, opening a TCP connection is an essential function. 
 And we checked that lines of kernel code, such as lines in \texttt{void tcp\_init\_sock(struct sock *sk)}, that correspond 
 with opening TCP sockets, were part of ``popular paths''. Thus, essential functions, such as \texttt{open\_tcp\_connection()} should be 
 included in the sandbox kernel. Examples of other necessary functions are \texttt{file.open, file.close, file.read, file.write} for file system 
@@ -240,9 +241,9 @@ file functions, 6 threading functions, and 8 miscellaneous functions (Table
 \ref{table:RepyKernel})~\cite{Repy-10, RepyKernel}. 
 
 Repy is one possible implementation of the sandbox kernel in our \lip design. 
-It follows the basic design principles discussed in Section \ref{lock-in-pop}.
-Repy sandbox kernel starts with basic building-block functions and tries to be conservative. 
-It was an approximation of leveraging the ``popular paths'', rather than a perfect match. 
+It starts with basic building-block functions and tries to be conservative. 
+Repy was designed and implemented before our ``popular paths'' study. 
+It was not a perfect match to the ``popular paths'', but was verified to use only part of the ``popular paths''. 
 As reported in our evaluation (Section~{{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}), 
 Repy accessed a subset (around 70\% to 80\%) of the ``popular paths''. 
 
