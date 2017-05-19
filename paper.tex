@@ -37,9 +37,17 @@
 \usepackage{pifont}
 \usepackage{graphicx}
 \usepackage{makecell}
-\usepackage{enumitem}
 \usepackage{xspace}
 
+\usepackage[small,compact]{titlesec}
+\usepackage{flushend}
+
+\usepackage[shortlabels]{enumitem}
+\setlist[itemize]{leftmargin=0.15in}
+
+\titlespacing{\section}{0pt}{3pt}{3pt}
+\titlespacing{\subsection}{0pt}{2pt}{2pt}
+\titlespacing{\subsubsection}{0pt}{1pt}{1pt}
 
 \newcommand{\urlwofont}[1]{\underline{\urlstyle{same}\url{#1}}}
 \newif\ifrev
@@ -129,7 +137,7 @@
 \input{limitation}
 \input{related_work}
 \input{conclusion}
-
+\input{acknowledgements}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Bibliography
