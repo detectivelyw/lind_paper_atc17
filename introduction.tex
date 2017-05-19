@@ -33,18 +33,19 @@ despite these paths accounting for about one-third of the total reachable kernel
 When we tested our ``popular paths'' metric against the two aforementioned ``code age'' and ``device drivers'' metrics, 
 we found our ``popular paths'' metric was much more effective (Section~{\ref{Verification-of-Hypothesis}}). 
 
-Demonstrating that security bugs are concentrated on unpopular
-code paths is only the first step to arguing that this leads to useful and
-practical design approaches.  Potential objections, which we evaluated are:
+This key information inspired the idea that if we could design virtual machines that only use ``popular kernel paths'', a strategy we dubbed \lip, 
+it would greatly increase resilience to zero-day bugs in the host OS kernel. 
+Yet, using such a design scheme creates a few challenges that would need to be overcome, in either design or application. These include: 
+
 \begin{itemize}
-\item It might not be possible in real-life codebases to successfully avoid ``unpopular paths''. 
-Perhaps other applications, or future versions of the applications we tested, frequently require the use of ``unpopular paths'', thus making our metric untenable?
-\item The exploits that adversaries use change over time. 
-Perhaps our observation that ``popular paths'' are safer is only an artifact of when we did our measurements and is not predictive of future exploits?
-\item Lastly, can developers make use of this observation in a practical setting?  That is, is it feasible for developers to actively try to avoid unpopular code paths?
+\item It might not be possible in real-life codebases to completely avoid ``unpopular paths.''  
+If other applications, or future versions of the applications we tested, frequently require the use of ``unpopular paths,'' would this make our metric untenable? 
+(Section~{\ref{lock-in-pop}})
+\item The exploits that adversaries use change over time. Could our observation that ``popular paths'' are safer be only an artifact of when we did our measurements, 
+and not be predictive of future exploits? (Section~{\ref{Verification-of-Hypothesis}}) 
+\item Lastly, can developers make use of this observation in a practical setting? That is, is it feasible for developers to actively try to avoid unpopular code paths? 
+(Section~{\ref{implementation}})
 \end{itemize}
-To test these objections we built a prototype system, called Lind, which forces applications
-to only use popular kernel paths.
 
 Our prototype, Lind, pairs two key components -- Google's Native Client
 (NaCl) \cite{NaCl-09} and Seattle's Repy \cite{Repy-10}.
