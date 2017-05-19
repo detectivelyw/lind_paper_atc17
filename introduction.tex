@@ -7,7 +7,7 @@ by gaining root access and compromising the host \cite{linux-0day}. Similarly, z
 vulnerabilities can be exploited \cite{fbi-0day} or their presence not be acknowledged \cite{nsa-0day} 
 by government agencies, thus rendering millions of devices vulnerable.
 
-In theory, running a program in an operating system-level virtual machine (OSVM) like Docker \cite{Docker} or LXC \cite{LXC} should
+In theory, running a program in an operating-system-level virtual machine (OSVM) like Docker \cite{Docker} or LXC \cite{LXC} should
 prevent bugs in the host OS kernel from triggering. 
 However, the isolation provided by such systems is not the whole answer and faces some significant drawbacks. 
 To be effective, OSVM's software must not contain any bugs that could allow the program to escape the machine's containment 
@@ -17,7 +17,7 @@ The large amount of complex code needed to run such a system increases the odds 
 that tens of millions of user machines could be at risk \cite{linux-0day}.
 Furthermore, isolation will not work if a malicious program can access even a small portion of the host OS's kernel 
 that contains a zero-day flaw \cite{CVE-2016-5195}. 
-Both of these reveal the key underlying weakness in designing OSVM systems-- a lack of information 
+Both of these reveal the key underlying weakness in designing OSVM systems -- a lack of information 
 as to which parts of the host kernel can be safely exported to user programs. 
 
 Several attempts have been made to find a reliable metric to pinpoint where bugs are most likely to be in kernel code. 
@@ -47,8 +47,11 @@ and not be predictive of future exploits? (Section~{\ref{Verification-of-Hypothe
 (Section~{\ref{implementation}})
 \end{itemize}
 
-Our prototype, Lind, pairs two key components -- Google's Native Client
-(NaCl) \cite{NaCl-09} and Seattle's Repy \cite{Repy-10}.
+While we addressed some of these challenges in developing the \lip design, 
+we wanted to test how well a system could function if it forced applications to only use popular kernel paths. 
+To conduct these tests, we built a prototype system, called Lind. 
+For Lind we chose to use two key components -- Google's Native Client
+(NaCl) \cite{NaCl-09} and Seattle's Repy \cite{Repy-10}. 
 NaCl serves as a computational module that isolates
 binaries, providing memory safety for legacy programs running in our OSVM.
 It also passes system calls invoked by the program to the operating system interface, called SafePOSIX.
@@ -70,58 +73,22 @@ virtual machines, such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite
 While our ``popular paths'' metric may potentially apply to those
 systems, a direct comparison is not possible since they have different 
 ways of accessing hardware resources, and would require different measuring approaches.
-Our results show that applications in Lind were substantially less likely to trigger
-kernel bugs.
+Our results show that applications in Lind were substantially less likely to trigger kernel bugs.
 
 By so doing we demonstrated that forcing an application to only use popular
 OS kernel approach can be an effective and practical method to improve
-system security.
+system security. Armed with this knowledge, the \lip can be adapted to incorporate other OSVM design configurations. 
 
 In summary, the main contributions of this paper are as follows:
 
 \begin{itemize}\setlength\itemsep{0em}
-%\item
-%We postulate a new approach for securing privileged code,
-%such as the OS kernel, based on the idea that popular kernel paths contain
-%fewer bugs.  \cappos{I'm not sure how this differs from 3...}
-
 \item
-We propose a quantitative metric that evaluates security at the line-of-code level. 
-We discover that security bugs in the Linux kernel have strong correlation with ``popular paths''. 
-We verified our hypothesis that ``popular paths'' have significantly fewer security bugs than other paths. 
-%Yiwen: cut
-%Compared against other proposed metrics, 
-%such as the age of code~\cite{ozment2006milk}, or
-%the increased risk in driver code~\cite{PittSFIeld}. 
-%We find that choosing popular kernel paths is a much more effective metric for identifying lines of code that are unlikely to contain security flaws.
-
+We propose a quantitative metric that evaluates security at the line-of-code level, 
+and verify our hypothesis that ``popular paths'' have significantly fewer security bugs than other paths. 
 \item
-Based on the ``popular paths'' metric, we postulate a new approach for securing privileged code,
-and develop a new design scheme called \lip. 
-It accesses only popular code paths
-through a very small trusted computing base.
-The need for complex functionality is addressed by re-creating riskier system calls
-in a memory-safe programming language within a secure sandbox.
-
+Based on the ``popular paths'' metric, we develop a new design scheme called \lip that accesses only popular code paths through a very small trusted computing base. 
+The need for complex functionality is addressed by re-creating riskier system calls in a memory-safe programming language within a secure sandbox.
 \item
-To demonstrate the practicality of the ``popular paths'' metric, we built a prototype virtual machine, Lind, using the \lip design,
-and tested its effectiveness against three other virtual machines. 
-We find that Lind exposes 8-12x fewer zero-day kernel bugs. 
+To demonstrate the practicality of the ``popular paths'' metric, we built a prototype virtual machine, Lind, using the \lip design, 
+and tested its effectiveness against three other virtual machines. We find that Lind exposes 8-12x fewer zero-day kernel bugs. 
 \end{itemize}
-
-% Yiwen: I'd like to cut this roadmap
-%The remainder of this paper is organized as follows.
-%Section \ref{sec.motivation-and-background} presents the scope of our study
-%and precisely describes our threat model.
-%Earlier kernel protection metrics and how they performed
-%against our newly proposed metric are discussed in Section \ref{sec.metric}.
-%We discuss handling bugs in the OSVM software in
-%Section~\ref{sec.design}, while focusing on design strategies for preventing exploitation of zero-day kernel
-%bugs in the host OS.
-%Section \ref{sec.design} also describes our \lip design scheme.
-%In Section \ref{sec.implementation} we discuss the construction of our Lind
-%prototype, while Section \ref{sec.evaluation} provides a quantitative
-%security analysis of Lind compared to other virtualization systems.
-%Section \ref{sec.limitation} outlines limitations of our study. 
-%Finally, Section \ref{sec.related_work} reviews existing work relevant to Lind's security goals, 
-%while the cogent points relayed in the paper are reviewed in Section \ref{sec.conclusion}.
