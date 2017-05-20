@@ -120,8 +120,8 @@ We discuss this approach in detail next.
 
 %As discussed above, a weakness of the previous approaches is the inevitable contact
 %between the privileged kernel code and an untrusted application.
-Recall that we want to show that the ``popular paths'' metric is practically useful. 
-We do so by leveraging this key metric ``popular kernel paths '', which contain fewer bugs, to devise a design
+Recall that we want to show that the ``popular paths'' metric can be used in practice. 
+We do so by leveraging this ``popular kernel paths '' metric, which contain fewer bugs, to devise a design
 in which all code, including the complex part
 of the operating system interface, access only
 ``popular kernel paths'' through a small TCB. As it ``locks" all functionality
@@ -165,7 +165,7 @@ Further discussion of this trade-off is beyond the scope of this paper,
 though we acknowledge it is an issue that should be addressed as \lip is deployed. 
 While restricting the system call interface is a big hammer for limiting access to ``popular paths'' in the kernel, 
 we believe that this is the best choice available, given that we do not want to require modification to the kernel, and 
-would like to allow users to easily run their applications without much extra efforts. 
+would like to allow users to easily run their applications without much extra effort. 
 
 The application is provided more complex functionality due to the SafePOSIX re-creation
 (\ding{174} in Figure \ref{fig:design_safe_reimplementation}).
