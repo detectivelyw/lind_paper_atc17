@@ -17,14 +17,14 @@ The large amount of complex code needed to run such a system increases the odds 
 that tens of millions of user machines could be at risk \cite{linux-0day}.
 Furthermore, isolation will not work if a malicious program can access even a small portion of the host OS's kernel 
 that contains a zero-day flaw \cite{CVE-2016-5195}. 
-Both of these reveal the key underlying weakness in designing OSVM systems -- a lack of information 
+Both of these drawbacks reveal the key underlying weakness in designing OSVM systems -- a lack of information 
 as to which parts of the host kernel can be safely exported to user programs. 
 
 Several attempts have been made to find a reliable metric to pinpoint where bugs are most likely to be in kernel code. 
 A number of previous studies have suggested that older code may be more vulnerable than new code \cite{ozment2006milk}  
 or that certain parts (such as device drivers) of the kernel \cite{PittSFIeld} may be more bug-prone than others. 
 To these hypotheses, we add a new security metric idea, called ``popular paths.'' 
-Positing that bugs in the popular paths, associated with frequently-used programs, are more frequently found in software testing 
+Positing that bugs in the popular paths, associated with frequently-used programs, are more likely to be found in software testing 
 because of the numerous times they are executed by diverse pieces of software, we proposed that kernel code found in these paths, 
 would have less chance of containing bugs than code in less-use parts of the kernel. 
 We performed a quantitative analysis of resilience to flaws in two versions of the Linux kernel (version 3.13.0 and version 3.14.1), 
@@ -67,7 +67,7 @@ bugs in Lind and three other virtualized environments,
 including Docker~\cite{Docker}, LXC~\cite{LXC}, and Graphene~\cite{Graphene-14}. 
 In this study, our evaluation was focused on comparison with operating-system-level virtualization containers, such as Docker and LXC, 
 and library OSes, such as Graphene. 
-We excluded comparison with bare-metal hypervisor~\cite{Xen-03, VMWare-Server}, 
+We excluded comparison with bare-metal hypervisors~\cite{Xen-03, VMWare-Server}, 
 hardware-based virtualization~\cite{IntelVT, keller2010nohype} and full virtualization 
 virtual machines, such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}. 
 While our ``popular paths'' metric may potentially apply to those
@@ -77,7 +77,7 @@ Our results show that applications in Lind were substantially less likely to tri
 
 By so doing we demonstrated that forcing an application to only use popular
 OS kernel approach can be an effective and practical method to improve
-system security. Armed with this knowledge, the \lip can be adapted to incorporate other OSVM design configurations. 
+system security. Armed with this knowledge, the \lip principle can be adapted to incorporate other OSVM design configurations. 
 
 In summary, the main contributions of this paper are as follows:
 
