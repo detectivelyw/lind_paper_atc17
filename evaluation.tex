@@ -49,9 +49,9 @@ practical systems?}
 \textbf{Setup.}
 To evaluate how well each virtualization system protects the Linux kernel
 against reported zero-day bugs,
-we examined a list of 69 historical bugs that had been identified and patched in version 3.14.1 of the Linux kernel \cite{CVE-Datasource}. 
-We obtained this list of 69 bugs from National Vulnerability Database (NVD) \cite{NVD}. 
-This list was an exhaustive list of CVE \cite{CVE} bugs that had been confirmed as present in this Linux kernel version at the time of our study (September, 2015). 
+we examined a list of 69 historical bugs that had been identified and patched in version 3.13.0 and 3.14.1 of the Linux kernel \cite{CVE-Datasource}. 
+By consulting the National Vulnerability Database (NVD) \cite{NVD}, we obtained a list of all CVEs \cite{CVE} 
+that were known to exist in the Linux kernel version 3.13.0 and 3.14.1 as of September 2015; we found 69 such vulnerabilities. 
 By analyzing security patches for those bugs,
 we were able to identify the lines of code in the kernel that correspond to each one.
 
