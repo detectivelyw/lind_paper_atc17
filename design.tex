@@ -120,7 +120,7 @@ We discuss this approach in detail next.
 
 %As discussed above, a weakness of the previous approaches is the inevitable contact
 %between the privileged kernel code and an untrusted application.
-Recall that we want to show that ``popular paths'' metric is practically useful. 
+Recall that we want to show that the ``popular paths'' metric is practically useful. 
 We do so by leveraging this key metric ``popular kernel paths '', which contain fewer bugs, to devise a design
 in which all code, including the complex part
 of the operating system interface, access only
@@ -159,12 +159,7 @@ would be included in the sandbox kernel.
 Examples of other necessary functions are \texttt{file.open, file.close, file.read, file.write} for file system 
 functions, and \texttt{create\_thread, create\_lock, lock.acquire, lock.release} for threading functions. 
 
-As a system tries to be more compatible and allow more user applications to run, 
-its designers will need to make some decisions to include more system calls in the sandbox kernel. 
-Ideally, it would be better if a sandbox kernel could maximize its use of the ``popular paths.'' 
-However, practically this can be difficult, since there is no perfect mapping from the lines of code in the underlying kernel to the 
-system call interface. The best we can do is to try to achieve an approximation of leveraging the ``popular paths.'' 
-And, in order to make security our priority, the designed sandbox kernel should use only a subset of the ``popular paths''. 
+In order to make security our priority, the designed sandbox kernel should use only a subset of the ``popular paths''. 
 For systems where security is not as critical, trade-offs can certainly be made to include some ``unpopular paths'' to accommodate applications. 
 Further discussion of this trade-off is beyond the scope of this paper, 
 though we acknowledge it is an issue that should be addressed as \lip is deployed. 
@@ -251,6 +246,11 @@ Repy was designed and implemented before our ``popular paths'' study, and so it 
 but it was verified as using only part of the ``popular paths.'' 
 As reported in our evaluation (Section~{{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}), 
 Repy accessed a subset (around 70\% to 80\%) of the ``popular paths.'' 
+
+Our current implementation does not end up using all of the ``popular paths''. 
+It is certainly safe to use fewer paths than are available, but it is possible that we are missing out on some performance or compatibility gains. 
+As we extend our prototype, the ``popular path'' metric will allow us to check whether new APIs we add 
+expose potentially unsafe kernel code to applications in the sandbox.
 
 \begin{table}
 \centering
