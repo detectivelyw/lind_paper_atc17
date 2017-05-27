@@ -1,7 +1,7 @@
 \section{Developing a Quantitative Metric for Evaluating Kernel Security}
 \label{sec.metric}
 
-If we knew which lines of code in the kernel were likely to contain zero-day
+If we know which lines of code in the kernel are likely to contain zero-day
 bugs, we could try to avoid using them in an OSVM.
 %By understanding how lines of code in the kernel are used, we can better predict their
 %likelihood to contain security flaws.
@@ -46,10 +46,10 @@ code are executed when an application runs.
 \textbf{Popular kernel paths.}
 To capture the popular kernel paths, we used two strategies concurrently.
 First, we attempted to capture the normal usage behavior of popular applications.
-To do this, two students used applications for Debian 7.0 , a widely-used and popular open source project,
-that Popularity Contest~\cite{Top-Packages} had deemed the 50 most popular Debian
-packages (omitting libraries, which get included automatically by packages that depend on them).
-Each student used 25 applications for their
+To do this, two students used applications for Debian 7.0 , a widely-used and popular open source project
+that Popularity Contest~\cite{Top-Packages} has deemed one of the 50 most popular Debian
+packages (omitting libraries, which are automatically included by packages that
+depend on them). Each student used 25 applications for their
 tasks (i.e., writing, spell checking, printing in a text editor, or using
 an image processing program).
 %In instances where there were two applications that performed a
@@ -73,7 +73,7 @@ replicate our results.
 \textbf{Reachable kernel paths.}
 There are certain paths in the kernel, such as unloaded drivers, that are
 unreachable and unused.
-To understand which paths are unreachable, we used two techniques.  First,
+To determine which paths are unreachable, we used two techniques.  First,
 we performed system call fuzzing with the Trinity
 system call fuzz tester~\cite{Trinity}.
 %These included 16 child processes
@@ -132,14 +132,14 @@ We assume that kernel bugs appear at an average rate proportional to the
 number of lines of kernel code.
 %and different kernel parts may have different rates that bugs appear.
 %independently of the time since the last bug occurrence.
-Therefore, consistent with prior research~\cite{mayer1989probability}, 
-%\yiwen{add more recent citation?} 
+Therefore, consistent with prior research~\cite{mayer1989probability},
+%\yiwen{add more recent citation?}
 the rate of defect occurrence per LOC follows a Poisson
 distribution~\cite{Poisson-distribution}.
 %who proposed a probability model for characterizing the relationship
 %between discrete data set.
 The premise we tested is that bugs occur at different rates in different
-parts of the kernel, i.e., the less popular kernel portion has more bugs.
+parts of the kernel, i.e., that the less popular kernel portion has more bugs.
 
 We first divided the kernel into two sets,
 $A$ and $B$, where bugs occur at rates $\lambda_A$ and
@@ -174,8 +174,8 @@ popular paths have a much lower bug rate than unpopular ones.
 
 \noindent
 {\bf Comparison with other security metrics.}
-Ozment, et al.~\cite{ozment2006milk} demonstrated that code that
-had been around longer in the Berkeley Software Distribution (BSD) \cite{BSD}
+Ozment, et al.~\cite{ozment2006milk} demonstrated that older code in the
+Berkeley Software Distribution (BSD) \cite{BSD}
 kernel tended to have fewer bugs (metric 1).
 %They determined that a significant extent (61\%) of the reported
 %vulnerabilities were
@@ -203,7 +203,7 @@ Applying this metric on our dataset, we found that the driver code in our versio
 of the Linux kernel accounted for only 8.9\% of the total codebase, and contained
 merely 4 out of the 40 bugs (Figure \ref{fig:bug_density}).
 One reason for this is that, after Chou's study was published, system
-designers focused efforts on improving driver code. For example, Palix \cite{palix2011faults}
+designers focused efforts on improving driver code. Palix \cite{palix2011faults}
 found that %with development of the Linux kernel,
 \texttt{drivers} now have lower fault rate than other directories,
 such as \texttt{arch} and \texttt{fs}.
@@ -228,8 +228,8 @@ flaws, indicating the need to localize bugs at a finer granularity.
 %to conduct a comparison between them and our popular-paths metric.
 
 To summarize, we demonstrated that previously proposed security
-metrics have weak correlation between the occurrence of bugs
-and areas of code they identify. In contrast, our metric (metric 3)
+metrics show only weak correlation between the occurrence of bugs
+and the type of code they target. In contrast, our metric (metric 3)
 provides an effective and statistically significant
 %($\alpha=0.01$, $\rho=0.0015$)
 means for predicting where in the kernel exploitable flaws

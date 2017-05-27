@@ -9,7 +9,7 @@
 %
 
 %In this paper, we offer a new insight about where security bugs lie. By observing that the OS kernel paths accessed
-%by popular applications in everyday use contain significantly fewer security bugs than less-used paths, 
+%by popular applications in everyday use contain significantly fewer security bugs than less-used paths,
 %we devise a design that allows applications to run more securely in VMs on top of a vulnerable host OS.
 %Furthermore, We
 %leverage this observation to devise the \lip design, which
@@ -25,16 +25,17 @@
 %Our results show that Lind can prevent the triggering of zero-day kernel bugs significantly better
 %than an existing library OS (Graphene) and containers such as Docker and LXC.
 
-Virtual machines (VMs) that try to isolate untrusted code are widely used in practice. 
+Virtual machines (VMs) that try to isolate untrusted code are widely used in practice.
 However, it is often possible to trigger zero-day flaws
 in the host Operating System (OS) from inside of such virtualized systems.
 %
-In this paper, we propose a new security metric showing strong correlation between ``popular paths'' 
-and kernel vulnerabilities. We verified that the OS kernel paths accessed 
-by popular applications in everyday use contain significantly fewer security bugs than less-used paths.  We then demonstrate that this observation is
-practically useful by building a prototype system which \textbf{\textit{locks}} an
-application into only using \textbf{\textit{popular}} OS kernel paths.  By doing so, we
-demonstrate that
-we can prevent the triggering of zero-day kernel bugs
-significantly better than three other competing approaches, and argue that
-this is a practical approach to  secure system design.
+In this paper, we propose a new security metric showing strong correlation
+between ``popular paths''
+and kernel vulnerabilities. We verify that the OS kernel paths accessed
+by popular applications in everyday use contain significantly fewer security
+bugs than less-used paths.  We then demonstrate that this observation is
+useful in practice by building a prototype system which \textbf{\textit{locks}}
+an application into using only \textbf{\textit{popular}} OS kernel paths.
+By doing so, we demonstrate that we can prevent the triggering of zero-day
+kernel bugs significantly better than three other competing approaches, and
+argue that this is a practical approach to  secure system design.

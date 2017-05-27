@@ -6,20 +6,20 @@ this study does not evaluate a few existing design schemes.
 
 \noindent
 \textbf{Goals.}
-Ultimately, our goal is to help designers to
-create systems that allow untrusted programs to 
-run on unpatched and vulnerable host OSes without triggering vulnerabilities that attackers could exploit. 
-Developing effective defenses for the host OS kernel is essential as kernel code 
+Ultimately, our goal is to help designers
+create systems that allow untrusted programs to
+run on unpatched and vulnerable host OSes without triggering vulnerabilities that
+attackers could exploit.
+Developing effective defenses for the host OS kernel is essential as kernel code
 can expose privileged access to attackers that could lead to a system take-over.
 
-Our hypothesis was that OS kernel code paths that are frequently used receive
-more
-attention and therefore are less likely to contain security vunlnerabilities.
-Our approach, then, was to test this hypothesis and, if validated, determine
-if this observation could be exploited by designers to build 
+Our hypothesis is that OS kernel code paths that are frequently used receive
+more attention and therefore are less likely to contain security vunlnerabilities.
+Our approach, then, is to test this hypothesis and, if validated, determine
+if this observation could be exploited by designers to build
 virtualization systems, such as guest OSVMs, system call interposition modules
-or library OSes, that force untrusted applications to keep on commonly-used kernel
-code paths and thereby improve security.
+or library OSes, that force untrusted applications to keep on popular kernel
+code paths, thereby improving security.
 
 
 
@@ -33,7 +33,7 @@ the exploit can be done either directly or indirectly.
 In a direct exploit, the attacker accesses a vulnerable portion of the host OS's kernel
 using a crafted attack code. In an indirect exploit,
 the attacker first takes advantage of a vulnerability in the virtualization system itself
-(for example, a buffer-over-flow vulnerability)
+(for example, a buffer overflow vulnerability)
 to escape the VM's containment. Once past the containment, the attacker would be able to run arbitrary code
 in the host OS.
 The secure virtualization system design we propose
@@ -44,8 +44,8 @@ potential threats our system could face:
 
 \begin{itemize}\setlength\itemsep{0em}
 
-\item The attacker possesses knowledge of one or more unpatched
-vulnerability in the host OS.
+\item The attacker possesses knowledge of one or several unpatched
+vulnerabilities in the host OS.
 
 \item The attacker can execute any code in the secure
 virtualization system.
@@ -58,9 +58,9 @@ is then considered successful in compromising the system.
 
 %\noindent
 %\textbf{Exclusion.}
-%It should be noted that our study intentionally excludes 
+%It should be noted that our study intentionally excludes
 %a comparison with solutions that do not run on top of a
-%full-fledged privileged OS, such as 
+%full-fledged privileged OS, such as
 %a bare-metal hypervisor~\cite{Xen-03, VMWare-Server} or
 %hardware-based virtualization~\cite{IntelVT, keller2010nohype}.
 %While our techniques can potentially apply to those
@@ -71,7 +71,7 @@ is then considered successful in compromising the system.
 %such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}.
 %Such systems simulate hardware to allow an unmodified guest OS to run. The goal
 %of our design is to substitute the large and complex TCB required for a guest OS, with a single-process
-%program with a small TCB and a secure isolated environment. With different goals, our proposed design is 
+%program with a small TCB and a secure isolated environment. With different goals, our proposed design is
 %a fundamentally different approach from full virtualization. As a result, direct measurement and comparison between full virtualization
 %and our design is
 %beyond the scope of this work.

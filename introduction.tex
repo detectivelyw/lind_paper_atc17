@@ -1,94 +1,111 @@
 \section{Introduction}
 \label{sec.introduction}
 
-The number of attacks involving the exploitation of zero-day vulnerabilities more than doubled 
-from 2014 to 2015 \cite{zero-day}. Skilled hackers can find a security flaw in a system and use it to hold the system's users hostage, e.g., 
-by gaining root access and compromising the host \cite{linux-0day}. Similarly, zero-day
-vulnerabilities can be exploited \cite{fbi-0day} or their presence not be acknowledged \cite{nsa-0day} 
-by government agencies, thus rendering millions of devices vulnerable.
+The number of attacks involving the exploitation of zero-day vulnerabilities
+more than doubled from 2014 to 2015 \cite{zero-day}. Skilled hackers can find a
+ security flaw in a system and use it to hold the system's users hostage, e.g.,
+by gaining root access and compromising the host \cite{linux-0day}. Similarly,
+zero-dayvulnerabilities can be exploited \cite{fbi-0day} or their presence not
+be acknowledged \cite{nsa-0day} by government agencies, thus rendering millions
+of devices vulnerable.
 
-In theory, running a program in an operating-system-level virtual machine (OSVM) like Docker \cite{Docker} or LXC \cite{LXC} should
-prevent bugs in the host OS kernel from triggering. 
-However, the isolation provided by such systems is not the whole answer and faces some significant drawbacks. 
-To be effective, OSVM's software must not contain any bugs that could allow the program to escape the machine's containment 
-and interact directly with the host OS. 
-Unfortunately, these issues are very common in OSVMs, with 14 CVE vulnerabilities confirmed for Docker \cite{Docker-Vulnerabilities} since 2014. 
-The large amount of complex code needed to run such a system increases the odds that flaws will be present, and, in turn, 
+In theory, running a program in an operating-system-level virtual machine (OSVM)
+like Docker \cite{Docker} or LXC \cite{LXC} should
+prevent bugs in the host OS kernel from triggering.
+However, the isolation provided by such systems is not the whole answer and
+faces some significant drawbacks.
+To be effective, OSVM's software must not contain any bugs that could allow
+the program to escape the machine's containment and interact directly with the host OS.
+Unfortunately, these issues are very common in OSVMs, with 14 CVE vulnerabilities
+confirmed for Docker \cite{Docker-Vulnerabilities} since 2014.
+The large amount of complex code needed to run such a system increases the odds
+that flaws will be present, and, in turn,
 that tens of millions of user machines could be at risk \cite{linux-0day}.
-Furthermore, isolation will not work if a malicious program can access even a small portion of the host OS's kernel 
-that contains a zero-day flaw \cite{CVE-2016-5195}. 
-Both of these drawbacks reveal the key underlying weakness in designing OSVM systems -- a lack of information 
-as to which parts of the host kernel can be safely exported to user programs. 
+Furthermore, isolation will not work if a malicious program can access even a small portion of the host OS's kernel
+that contains a zero-day flaw \cite{CVE-2016-5195}.
+Both of these drawbacks reveal the key underlying weakness in designing OSVM systems -- a lack of information
+as to which parts of the host kernel can be safely exported to user programs.
 
-Several attempts have been made to find a reliable metric to pinpoint where bugs are most likely to be in kernel code. 
-A number of previous studies have suggested that older code may be more vulnerable than new code \cite{ozment2006milk}  
-or that certain parts (such as device drivers) of the kernel \cite{PittSFIeld} may be more bug-prone than others. 
-To these hypotheses, we add a new security metric idea, called ``popular paths.'' 
-Positing that bugs in the popular paths, associated with frequently-used programs, are more likely to be found in software testing 
-because of the numerous times they are executed by diverse pieces of software, we proposed that kernel code found in these paths, 
-would have less chance of containing bugs than code in less-use parts of the kernel. 
-We performed a quantitative analysis of resilience to flaws in two versions of the Linux kernel (version 3.13.0 and version 3.14.1), 
-and found that only about 3\% of the bugs were present in popular code paths, 
-despite these paths accounting for about one-third of the total reachable kernel code. 
-When we tested our ``popular paths'' metric against the two aforementioned ``code age'' and ``device drivers'' metrics, 
-we found our ``popular paths'' metric was much more effective (Section~{\ref{Verification-of-Hypothesis}}). 
+Several attempts have been made to find a reliable metric to pinpoint where bugs
+ are most likely to be in kernel code.
+A number of previous studies have suggested that older code may be more vulnerable
+ than new code \cite{ozment2006milk}
+or that certain parts (such as device drivers) of the kernel \cite{PittSFIeld}
+may be more bug-prone than others.
+To these hypotheses, we add a new security metric idea, called ``popular paths.''
+Positing that bugs in the popular paths, associated with frequently-used programs,
+are more likely to be found in software testing
+because of the numerous times they are executed by diverse pieces of software,
+we propose that kernel code found in these paths,
+would have less chance of containing bugs than code in less-used parts of the kernel.
+We perform a quantitative analysis of resilience to flaws in two versions
+of the Linux kernel (version 3.13.0 and version 3.14.1),
+and find that only about 3\% of the bugs are present in popular code paths,
+despite these paths accounting for about one-third of the total reachable kernel code.
+When we test our ``popular paths'' metric against the two aforementioned
+ ``code age'' and ``device drivers'' metrics,
+we find our ``popular paths'' metric is much more effective
+ (Section~{\ref{Verification-of-Hypothesis}}).
 
-This key information inspired the idea that if we could design virtual machines that only use ``popular kernel paths'', a strategy we dubbed \lip, 
-it would greatly increase resilience to zero-day bugs in the host OS kernel. 
-Yet, using such a design scheme creates a few challenges that would need to be overcome, in either design or application. These include: 
+This key information inspired the idea that if we could design virtual machines
+ that use only ``popular kernel paths,'' a strategy we have dubbed \lip,
+it would greatly increase resilience to zero-day bugs in the host OS kernel.
+Yet, using such a design scheme creates a few challenges that would need to be
+ overcome. These include:
 
 \begin{itemize}
-\item It might not be possible in real-life codebases to completely avoid ``unpopular paths.''  
-If other applications, or future versions of the applications we tested, frequently require the use of ``unpopular paths,'' would this make our metric untenable? 
+\item It might not be possible in real-life codebases to completely avoid ``unpopular paths.''
+If other applications, or future versions of the applications we tested, frequently require the use of ``unpopular paths,'' would this make our metric untenable?
 (Section~{\ref{lock-in-pop}})
-\item The exploits that adversaries use change over time. Could our observation that ``popular paths'' are safer be only an artifact of when we did our measurements, 
-and not be predictive of future exploits? (Section~{\ref{Verification-of-Hypothesis}}) 
-\item Lastly, can developers make use of this observation in a practical setting? That is, is it feasible for developers to actively try to avoid unpopular code paths? 
+\item The exploits that adversaries use change over time. Could our observation that ``popular paths'' are safer be only an artifact of when we did our measurements,
+and not be predictive of future exploits? (Section~{\ref{Verification-of-Hypothesis}})
+\item Lastly, can developers make use of this observation in a practical setting? That is, is it feasible for developers to actively try to avoid unpopular code paths?
 (Section~{\ref{implementation}})
 \end{itemize}
 
-While we addressed some of these challenges in developing the \lip design, 
-we wanted to test how well a system could function if it forced applications to only use popular kernel paths. 
-To conduct these tests, we built a prototype system, called Lind. 
-For Lind we chose to use two key components -- Google's Native Client
-(NaCl) \cite{NaCl-09} and Seattle's Repy \cite{Repy-10}. 
+While we address some of these challenges in developing the \lip design,
+we want to test how well a system could function if it forced applications to
+use only popular kernel paths.
+To conduct these tests, we built a prototype system, called Lind.
+For Lind, we pick two key components -- Google's Native Client
+(NaCl) \cite{NaCl-09} and Seattle's Repy \cite{Repy-10}.
 NaCl serves as a computational module that isolates
 binaries, providing memory safety for legacy programs running in our OSVM.
 It also passes system calls invoked by the program to the operating system interface, called SafePOSIX.
-SafePOSIX re-creates the broader POSIX functionalities needed by applications, while being contained within the Repy sandbox. 
+SafePOSIX re-creates the broader POSIX functionalities needed by applications, while being contained within the Repy sandbox.
 An API in the sandbox only allows access to popular kernel paths, while
 the small (8K LOC) sandbox kernel of Repy isolates flaws in SafePOSIX
 to prevent them from allowing direct access to the host OS kernel.
 
-To test the effectiveness of Lind and our ``popular paths'' metric, 
-we replicated 35 kernel bugs that had been
-discovered in Linux kernel version 3.14.1.  We attempted to trigger those
-bugs in Lind and three other virtualized environments,
-including Docker~\cite{Docker}, LXC~\cite{LXC}, and Graphene~\cite{Graphene-14}. 
-In this study, our evaluation was focused on comparison with operating-system-level virtualization containers, such as Docker and LXC, 
-and library OSes, such as Graphene. 
-We excluded comparison with bare-metal hypervisors~\cite{Xen-03, VMWare-Server}, 
-hardware-based virtualization~\cite{IntelVT, keller2010nohype} and full virtualization 
-virtual machines, such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}. 
+To test the effectiveness of Lind and our ``popular paths'' metric,
+we replicate 35 kernel bugs discovered in Linux kernel version 3.14.1.  We attempt
+to trigger those bugs in Lind and three other virtualized environments,
+including Docker~\cite{Docker}, LXC~\cite{LXC}, and Graphene~\cite{Graphene-14}.
+In this study, our evaluation was focused on comparing operating-system-level virtualization containers, such as Docker and LXC,
+and library OSes, such as Graphene.
+We exclude comparison with bare-metal hypervisors~\cite{Xen-03, VMWare-Server},
+hardware-based virtualization~\cite{IntelVT, keller2010nohype} and full virtualization
+virtual machines, such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}.
 While our ``popular paths'' metric may potentially apply to those
-systems, a direct comparison is not possible since they have different 
+systems, a direct comparison is not possible since they have different
 ways of accessing hardware resources, and would require different measuring approaches.
-Our results show that applications in Lind were substantially less likely to trigger kernel bugs.
 
-By so doing we demonstrated that forcing an application to only use popular
-OS kernel approach can be an effective and practical method to improve
-system security. Armed with this knowledge, the \lip principle can be adapted to incorporate other OSVM design configurations. 
+Our results show that applications in Lind are substantially less likely to trigger kernel bugs.
+By doing so, we demonstrate that forcing an application to use only popular
+OS paths can be an effective and practical method to improve
+system security. Armed with this knowledge, the \lip principle can be adapted to
+incorporate other OSVM design configurations.
 
 In summary, the main contributions of this paper are as follows:
 
 \begin{itemize}\setlength\itemsep{0em}
 \item
-We propose a quantitative metric that evaluates security at the line-of-code level, 
-and verify our hypothesis that ``popular paths'' have significantly fewer security bugs than other paths. 
+We propose a quantitative metric that evaluates security at the line-of-code level,
+and verify our hypothesis that ``popular paths'' have significantly fewer security bugs than other paths.
 \item
-Based on the ``popular paths'' metric, we develop a new design scheme called \lip that accesses only popular code paths through a very small trusted computing base. 
+Based on the ``popular paths'' metric, we develop a new design scheme called \lip that accesses only popular code paths through a very small trusted computing base.
 The need for complex functionality is addressed by re-creating riskier system calls in a memory-safe programming language within a secure sandbox.
 \item
-To demonstrate the practicality of the ``popular paths'' metric, we built a prototype virtual machine, Lind, using the \lip design, 
-and tested its effectiveness against three other virtual machines. We find that Lind exposes 8-12x fewer zero-day kernel bugs. 
+To demonstrate the practicality of the ``popular paths'' metric, we build a prototype virtual machine, Lind, using the \lip design,
+and test its effectiveness against three other virtual machines. We find that Lind exposes 8-12x fewer zero-day kernel bugs.
 \end{itemize}
