@@ -1,4 +1,4 @@
-\section{Limitation} 
+\section{Limitations}
 \label{sec.limitation}
 
 One of our challenges in conducting this study was deciding where to place the
@@ -6,14 +6,17 @@ limits of its scope. To explore any one strategy
 in depth, we felt it was necessary to intentionally exclude consideration of
 a few other valid approaches. These choices may have placed some limitations on our results.
 
-One limitation in our evaluation of bugs is that there are some types of bugs that are difficult to evaluate using our metric. 
+One limitation is that there are some types of bugs that are difficult to evaluate using our metric.
 For example, bugs caused by a race condition, or that involve defects in the internal kernel data
 structures, or ones that require complex triggering conditions across multiple kernel
-paths, may not be immediately identified using our metric. As we continue to refine our metric, 
-we will also look to evolve our evaluation criteria to find and protect against more complex types of bugs. 
+paths, may not be immediately identified using our metric. As we continue to refine our metric,
+we will also look to evolve our evaluation criteria to find and protect against more complex types of bugs.
 
-Another limitation is that our current metric helps us conclude that certain lines of code in the kernel were reached or not.
-Though this is an important factor in exploiting a bug, it may not be fully sufficient for all bugs. 
-While a stronger conclusion about bug exploitation conditions would be ideal, 
-it would be hard to do so using a quantitative metric. 
-Instead, it would require a more complicated manual process, which was outside the scope of this study. 
+Another limitation is that our current metric concludes that certain lines of
+code in the kernel were reached or not.
+Though this is an important factor in exploiting a bug, it may not be fully
+sufficient for all bugs.
+While a stronger conclusion about bug exploitation conditions would be ideal,
+it would be hard to do so using a quantitative metric.
+Instead, it would require a more complicated manual process, which was outside
+the scope of this study.
