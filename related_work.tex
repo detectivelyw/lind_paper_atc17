@@ -45,8 +45,8 @@ as well as background information on technologies incorporated into Lind.
 %Much work has been done in analyzing system faults using techniques in
 %software engineering. For example,
 
-\noindent
-\textbf{Virtualization systems.}
+%\noindent
+%\textbf{Virtualization systems.}
 Lind incorporates a number of existing virtualization techniques, which are
 described below.
 %This section details some
@@ -129,7 +129,7 @@ executes both single and
 multi-process applications with low performance overhead.
 
 The key distinction between Lind and other existing library OSes is that
-Lind leverages our ``popular paths'' metric to verify that it only the
+Lind leverages our ``popular paths'' metric to verify that it only accesses the
 safer part of the kernel is accessed.
 Existing library OSes trust the underlying host kernel to perform many functions,
 and filters only certain system calls.
