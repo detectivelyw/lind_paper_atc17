@@ -1,8 +1,8 @@
 \section{Related Work}
 \label{sec.related_work}
 
-This section summarizes a number of earlier initiatives to ensure the safety of privileged code. 
-The literature referenced in this section includes past efforts to design and build virtualized systems, 
+This section summarizes a number of earlier initiatives to ensure the safety of privileged code.
+The literature referenced in this section includes past efforts to design and build virtualized systems,
 as well as background information on technologies incorporated into Lind.
 
 %\textbf{Safety metrics.}
@@ -86,7 +86,8 @@ memory-safe languages like Java or C\#, flaws in this code can
 still pose a threat~\cite{JavaBugs, Java-Lessons}.
 Any bug or failure in a programming language virtual
 machine is usually fatal. In contrast, the main component of Lind
-is built using Repy, which is a programming language with a very small TCB, minimizing the chance of contact with kernel flaws.
+is built using Repy, which is a programming language with a very small TCB,
+minimizing the chance of contact with kernel flaws.
 
 \textit{OS virtualization}
 techniques include
@@ -95,13 +96,13 @@ and Hyper-V, container systems such as LXC~\cite{LXC}, BSD's jail, and Solaris z
 hosted hypervisor virtualization, such as VMware
 Workstation, VMware Server, VirtualPC and VirtualBox.
 Security by isolation \cite{Qubes, Overshadow, SecureVM, HypSec}
-provides safe executing environments through containment for multiple
+uses containment to provide safe executing environments for multiple
 user-level virtual environments sharing the same hardware.
 However, this approach is limited due to
 the large attack vectors against the hypervisors.
 
 \textit{Library OSes}
-allow applications to efficiently obtain the benefits of virtual machines
+allow applications to efficiently gain the benefits of virtual machines
 by refactoring a traditional OS kernel into an application library.
 Porter, et al. developed Drawbridge \cite{Drawbridge-11},
 a library OS
@@ -125,10 +126,11 @@ shielded execution of unmodified server applications
 in an untrusted cloud host.
 Tsai, et al. developed Graphene \cite{Graphene-14}, a library OS that
 executes both single and
-multi-process applications with low performance overheads.
+multi-process applications with low performance overhead.
 
-The key distinction between Lind and other existing library OSes is that 
-Lind leveraged our ``popular paths'' metric to verify that it only accessed the safer part of the kernel. 
-Existing library OSes trust the underlying host kernel to perform many functions, 
-while filtering certain system calls. 
-Our work and previous library OSes are orthogonal, but we provide useful insights with our ``popular paths'' metric. 
+The key distinction between Lind and other existing library OSes is that
+Lind leverages our ``popular paths'' metric to verify that it only the
+safer part of the kernel is accessed.
+Existing library OSes trust the underlying host kernel to perform many functions,
+and filters only certain system calls.
+Our work and previous library OSes are orthogonal, but we provide useful insights with our ``popular paths'' metric.
