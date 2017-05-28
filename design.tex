@@ -25,7 +25,9 @@ our metric by accessing only popular code paths.
 
 \subsection{Previous Attempts and Their Limitations}
 
-\subsubsection{System Call Interposition (SCI)}
+%\subsubsection{System Call Interposition (SCI)}
+\noindent
+\textbf{System call interposition (SCI).}
 SCI systems~\cite{Janus0:96, Janus:99} filter system calls to mediate requests
 from untrusted user code instead of allowing them to go directly to the kernel.
 The filter checks a predefined security policy to decide which system calls are
@@ -69,7 +71,9 @@ inaccurate policy decisions.
 %system call interposition alone.
 %More importantly, there is not a good security metric to indicate if a set of policy decisions is good.
 
-\subsubsection{Functionality Re-Creation}
+%\subsubsection{Functionality Re-Creation}
+\noindent
+\textbf{Functionality re-creation.}
 Systems such as Drawbridge \cite{Drawbridge-11},
 Bascule \cite{Bascule}, and Graphene \cite{Graphene-14} can
 provide richer functionality and run more complex programs than most systems built
@@ -225,7 +229,7 @@ these calls would usually be forwarded to the host OS kernel. In Lind, we
 modified NaCl to instead forward these calls to our SafePOSIX re-creation
 (described in detail below).
 
-\paragraph{SafePOSIX.}
+\paragraph{Repy Sandbox.}
 
 To build an API that can access the safe parts of the underlying kernel while
 still supporting existing applications, we need two things. First, we need a
