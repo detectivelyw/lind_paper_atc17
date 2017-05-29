@@ -14,10 +14,10 @@
 %code paths through a very small trusted computing base, and utilizes
 %functionality re-creation within a secure sandboxed environment for complex implementations.
 
-In the previous section we have demonstrated that ``popular paths'' correlate in
-a statistically-significant manner with security.
+In the previous section we have shown that ``popular paths'' correlate in
+a statistically significant manner with security.
 Next, we want to demonstrate that our ``popular paths'' metric is useful in
-actual practice for devising a feasible designs for
+practice for designing 
 secure virtualization systems. We first briefly discuss the limitations faced
 by existing methods, due to the lack of a good
 security metric. We then discuss our new design scheme named \lip, which follows
@@ -89,7 +89,7 @@ as ``functionality re-creation."
 %\end{figure}
 
 The key to this design is to not fully rely on the underlying
-kernel for system functions, but to re-create its own system functionalities.
+kernel for system functions, but to re-create its own system functionality.
 %As illustrated in Figure \ref{fig:design_functionality_reimplementation},
 This design  %communicate with the kernel to
 When it has access to resources, like memory, CPU, and disk storage, the system
@@ -118,7 +118,7 @@ past ten years~\cite{NVD}.
 %OS~\cite{CVE-2008-2100}.
 
 Second, functionality re-creation may assume that the underlying host kernel is correct.
-As we have seen, this assumption is often incorrect; host kernels may have bugs in their implementation that leave them vulnerable to attack.
+As we have seen, this assumption is often incorrect: host kernels may have bugs in their implementation that leave them vulnerable to attack.
 Thus, to provide the greatest assurance that the host kernel will not be exposed to malicious user programs,
 a secure functionality re-creation design should try to deliberately avoid kernel paths that are likely to contain flaws.
 We discuss this approach in detail next.
@@ -133,7 +133,7 @@ We do so by devising a design
 in which all code, including the complex part
 of the operating system interface, accesses only
 ``popular kernel paths'' through a small TCB. As it ``locks" all functionality
-requests into only the ``popular paths,'' we dubbed the design \lip.
+requests into only the ``popular paths,'' we call this design \lip.
 
 \begin{figure}%[h]
 \centering
@@ -159,11 +159,11 @@ Instead, the sandbox kernel follows a central design principle to include only s
 which can be checked to verify that only ``popular paths'' are used.
 The sandbox kernel should start with building-block functions to first form a minimum set of system calls.
 To give one example, for network programs, opening a TCP connection would be considered an essential function.
-So, we would check that lines of kernel code, such as lines in \texttt{void tcp\_init\_sock(struct sock *sk)}, that correspond
-with opening TCP sockets, are included in ``popular paths'' for that system, and the \texttt{open\_tcp\_connection()} function
-would be included in the sandbox kernel.
-Examples of other necessary functions are \texttt{file.open, file.close, file.read, file.write} for file system
-functions, and \texttt{create\_thread, create\_lock, lock.acquire, lock.release} for threading functions.
+We can verify that the lines of kernel code that correspond
+to opening TCP sockets, such as lines in \texttt{void tcp\_init\_sock(struct sock *sk)},  are included in the ``popular paths'' for that system, and so decide to include the \texttt{open\_tcp\_connection()} function
+in the sandbox kernel.
+Examples of other necessary functions are \texttt{file.open}, \texttt{file.close}, \texttt{file.read}, and \texttt{file.write} for filesystem
+functions, and \texttt{create\_thread}, \texttt{create\_lock}, \texttt{lock.acquire}, and \texttt{lock.release} for threading functions.
 
 In order to make security our priority, the designed sandbox kernel should only use a subset of the ``popular paths.''
 For systems where security is not as critical, trade-offs can certainly be made to include some ``unpopular paths'' to accommodate applications.
@@ -173,9 +173,9 @@ While restricting the system call interface is a big hammer for limiting access 
 we believe that this is the best choice available, given that we do not want to require modification to the kernel, and
 would like to allow users to easily run their applications without much extra effort.
 
-The application is provided more complex functionality due to the SafePOSIX re-creation
+The application is provided more complex functionality via the SafePOSIX re-creation
 (\ding{174} in Figure \ref{fig:design_safe_reimplementation}).
-SafePOSIX has the needed complexity to build the more convenient higher-level
+SafePOSIX has the needed complexity to build more convenient higher-level
 abstractions using the basic functionality provided by the sandbox kernel.
 The SafePOSIX re-creation is itself isolated within a library OS sandbox, which
 forces all system calls to go through the sandbox kernel.
@@ -194,22 +194,22 @@ non-popular (risky) kernel paths (\ding{176} in Figure \ref{fig:design_safe_reim
 and in the SafePOSIX re-creation. Even the user program will be buggy or
 perhaps explicitly malicious (created by attackers).
 Since the remaining components (\ding{172} and \ding{173} in Figure \ref{fig:design_safe_reimplementation})
-are small and/or well tested, this leads to a lower risk of compromise.
+are small and can be thoroughly tested, this leads to a lower risk of compromise.
 
 \subsection{Implementation of Lock-in-Pop}
 \label{implementation}
 
 To test the practicality of the ``popular paths'' metric and our \lip design,
 we implement a prototype virtual machine
-called Lind\footnote{\scriptsize Lind is an old English word for a lightweight,
-but still strong shield constructed from two layers of linden wood.}. The purpose of building the Lind
+called Lind.\footnote{\scriptsize Lind is an old English word for a lightweight,
+but still strong shield constructed from two layers of linden wood.} The purpose of building the Lind
 prototype is to demonstrate that our ``popular paths'' metric is practical, and
 that developers can build secure systems using it.
 Lind is divided into a \emph{computational module} that enforces software fault isolation (SFI) and a
 \emph{SafePOSIX module} that safely re-creates the OS functionality needed by user
-applications.  We use a slightly modified version of Native Client
-(NaCl)~\cite{NaCl-09} for the computational module; the SafePOSIX is
-implemented using Restricted Python (Repy)~\cite{Repy-10}, to support
+applications. We use a slightly modified version of Native Client
+(NaCl)~\cite{NaCl-09} for the computational module; SafePOSIX is
+implemented using Restricted Python (Repy)~\cite{Repy-10} and supports
 complex user applications without exposing potentially risky kernel paths.
 
 In this section we provide a brief description of these components and how they
@@ -236,23 +236,23 @@ still supporting existing applications, we need two things. First, we need a
 restricted sandbox kernel that only allows access to popular kernel paths. We
 used Seattle's Repy~\cite{Repy-10} sandbox to perform this task. Second, we
 have to provide complex system functions to user programs.
-For this task we used SafePOSIX, which implements the widely accepted standard
+For this task we created SafePOSIX, which implements the widely accepted standard
 POSIX interface on top of Repy.
 
 Because the sandbox kernel is the only code that will be in direct contact with host
 system calls, it should be small (to make it easy to audit), while providing
 primitives that can be used to build more complex functionality.
 We used Seattle's Repy system API due to its tiny (around 8K LOC) sandbox
-kernel, and its minimal set of system call APIs needed to build general
+kernel and its minimal set of system call APIs needed to build general
 computational functionality. Repy allows access only to the popular portions of
 the OS kernel through 33 basic API functions, including 13 network functions, 6
 file functions, 6 threading functions, and 8 miscellaneous functions (Table
 \ref{table:RepyKernel})~\cite{Repy-10, RepyKernel}.
 
 Repy is only one possible implementation of the sandbox kernel built for our \lip design.
-It was chosen because it starts with basic building-block functions and tries to be conservative.
+It was chosen because it starts with basic building-block functions and tries to be conservative in what underlying kernel functionality it uses.
 Repy was designed and implemented before our ``popular paths'' study, and so it was not a perfect match,
-but it was verified as using only part of the ``popular paths.''
+but it we experimentally verified that it uses a subset of the ``popular paths.''
 As reported in our evaluation (Section~{{\ref{Reachable-Kernel-Trace-Analysis-for-Repy-Sandbox}}),
 Repy accessed a subset (around 70\% to 80\%) of the ``popular paths.''
 
@@ -289,7 +289,7 @@ virtualnamespace.evaluate, getresources, and getlasterror.}  \\ \hline
 \subsubsection{Enhanced Safety in Call Handling with SafePOSIX Re-creation}
 
 The full kernel interface is extremely rich and hard to protect.
-The dual sandbox \lip design used to build Lind provides enhanced
+The \lip design used to build Lind provides enhances
 safety protection through both isolation and a POSIX interface (SafePOSIX). The
 latter re-creates risky system calls to
 provide full-featured API for legacy applications, with minimal impact on the kernel.
@@ -298,7 +298,7 @@ In Lind, a system call issued from user code is
 received by NaCl, and then redirected to SafePOSIX.
 To service a system call in NaCl, a server routine in
 Lind marshals its arguments into a text string, and sends the call and the arguments
-to SafePOSIX. The SafePOSIX re-creation serves the system call request, marshals the result, and
+to SafePOSIX. The SafePOSIX re-creation services the system call request, marshals the result, and
 returns it back to NaCl. Eventually, the result is returned as the appropriate
 native type to the calling program.
 

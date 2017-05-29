@@ -99,7 +99,7 @@ Security by isolation \cite{Qubes, Overshadow, SecureVM, HypSec}
 uses containment to provide safe executing environments for multiple
 user-level virtual environments sharing the same hardware.
 However, this approach is limited due to
-the large attack vectors against the hypervisors.
+the large attack surface exposed by most hypervisors.
 
 \textit{Library OSes}
 allow applications to efficiently gain the benefits of virtual machines
@@ -111,7 +111,7 @@ a library OS
 %and a library OS
 that presents a Windows persona for %a wide variety of
 Windows applications. Similar to Lind,
-it restricts access from usermode to host OS through
+it restricts access from usermode to the host OS through
 operations that pass through the security monitor.
 %\lois{How does this fit with Lind?}
 %
@@ -130,7 +130,7 @@ multi-process applications with low performance overhead.
 
 The key distinction between Lind and other existing library OSes is that
 Lind leverages our ``popular paths'' metric to verify that it only accesses the
-safer part of the kernel is accessed.
+safer part of the kernel.
 Existing library OSes trust the underlying host kernel to perform many functions,
-and filters only certain system calls.
+and filter only certain system calls.
 Our work and previous library OSes are orthogonal, but we provide useful insights with our ``popular paths'' metric.

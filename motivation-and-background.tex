@@ -11,15 +11,14 @@ create systems that allow untrusted programs to
 run on unpatched and vulnerable host OSes without triggering vulnerabilities that
 attackers could exploit.
 Developing effective defenses for the host OS kernel is essential as kernel code
-can expose privileged access to attackers that could lead to a system take-over.
+can expose privileged access to attackers that could lead to a system takeover.
 
 Our hypothesis is that OS kernel code paths that are frequently used receive
-more attention and therefore are less likely to contain security vunlnerabilities.
-Our approach, then, is to test this hypothesis and, if validated, determine
-if this observation could be exploited by designers to build
-virtualization systems, such as guest OSVMs, system call interposition modules
-or library OSes, that force untrusted applications to keep on popular kernel
-code paths, thereby improving security.
+more attention and therefore are less likely to contain security
+vulnerabilities. Our approach will be to test this hypothesis and explore the
+feasibility of building more secure virtualization systems, such as guest OSVMs, system
+call interposition modules, and library OSes, by forcing untrusted applications
+to stay on popular kernel code paths.
 
 
 
@@ -31,10 +30,10 @@ on a host OS in a virtualization system,
 %Furthermore, %we anticipate that
 the exploit can be done either directly or indirectly.
 In a direct exploit, the attacker accesses a vulnerable portion of the host OS's kernel
-using a crafted attack code. In an indirect exploit,
+using crafted attack code. In an indirect exploit,
 the attacker first takes advantage of a vulnerability in the virtualization system itself
 (for example, a buffer overflow vulnerability)
-to escape the VM's containment. Once past the containment, the attacker would be able to run arbitrary code
+to escape the VM's containment. Once past the containment, the attacker can run arbitrary code
 in the host OS.
 The secure virtualization system design we propose
 in Section~\ref{sec.design} can prevent both types of attacks effectively.
@@ -44,7 +43,7 @@ potential threats our system could face:
 
 \begin{itemize}\setlength\itemsep{0em}
 
-\item The attacker possesses knowledge of one or several unpatched
+\item The attacker possesses knowledge of one or more unpatched
 vulnerabilities in the host OS.
 
 \item The attacker can execute any code in the secure

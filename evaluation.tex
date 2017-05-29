@@ -2,7 +2,7 @@
 \label{sec.evaluation}
 
 To demonstrate that our ``popular paths'' metric is useful and practical,
-we use our Lind prototype as a testing tool.
+we used our Lind prototype as a testing tool.
 %in containing untrusted code and protecting the OS kernel,
 We compared Lind against three existing
 virtualization systems -- Docker, LXC, and Graphene.
@@ -68,7 +68,7 @@ For the rest, we used the Trinity system call fuzzer
 \cite{Trinity} on Linux 3.14.1 (referred to as ``Native'' Linux in Table~\ref{table:trigger_vulnerabilities}).
 By comparing the code reached during fuzzing with the lines of code affected by security patches,
 we were able to identify an additional 26 bugs that could be triggered.
-All together, we identified a total of 35 bugs that we were able to trigger from the user space, and these formed our final dataset for the evaluation.
+All together, we identified a total of 35 bugs that we were able to trigger from user space, and these formed our final dataset for the evaluation.
 
 We then evaluated the protection afforded by four virtualization systems (including Lind) by attempting to trigger the 35 bugs from inside each one.
 The host system for each test ran a version of Linux 3.14.1 with gcov instrumentation enabled.
@@ -84,7 +84,7 @@ virtualization systems, as shown in Table \ref{table:trigger_vulnerabilities}.
 All (100\%) bugs were triggered in Native Linux,
 while the other programs had lower rates: 8/35 (22.9\%)  in Docker,
 12/35 (34.3\%)  in LXC, and 8/35 (22.9\%) bugs in Graphene.
-In comparison, only 1 out of 35 bugs  (2.9\%) was triggered in Lind.
+Only 1 out of 35 bugs (2.9\%) was triggered in Lind.
 
 When we take a closer look at the results, we can see that these outcomes
 have a lot to do with the design principles of the virtualization systems and
@@ -94,7 +94,7 @@ Graphene's Linux library implements the Linux system calls using a variant of th
 Drawbridge \cite{Drawbridge-11} ABI, which has 43 functions. Those ABI functions
 are provided by the Platform Adaptation Layer (PAL), implemented using 50 calls
 to the kernel. It turns out that 8 vulnerabilities in our test were triggered by PAL's
-50 system calls. On the contrary, Lind only relies on 33 system calls, which
+50 system calls. By contrast, Lind only relies on 33 system calls, which
 significantly reduces risk and avoids 7 out of the 8 bugs.
 
 Graphene supports many complex and risky system calls, such as \texttt{execve}, \texttt{msgsnd}, and \texttt{futex},
@@ -103,7 +103,7 @@ In addition, for many basic and frequently-used system calls like \texttt{open} 
 Graphene allows rarely-used flags and arguments to be passed down to the kernel, which triggered bugs in
 the unpopular paths.
 In Lind, all system calls only allow a restricted set of simple and frequently-used flags and arguments.
-One example from our test result is that Graphene allows \texttt{O\_TMPFILE} flag to pass down with
+One example from our test result is that Graphene allows \texttt{O\_TMPFILE} flag to be passed to the
 \texttt{path\_openat()} system call. This reached risky lines of code inside \texttt{fs/namei.c} in the kernel,
 and eventually triggered bug CVE-2015-5706.
 The same bug was triggered in the same way inside Docker and LXC, but was successfully prevented by Lind,
@@ -118,18 +118,18 @@ that both rely directly on the Linux kernel to handle system call requests. Sinc
 to LXC and then into the kernel, we found out that all 8 kernel vulnerabilities triggered inside Docker were also triggered
 with LXC. In addition, LXC interacts with the kernel via its \texttt{liblxc} library component, which triggered the extra 4 bugs.
 
-It should be noted that, although the design of Lind only accesses popular paths in the kernel and implements SafePOSIX inside
-of a sandbox, there are a few fundamental building blocks for which Lind must rely on the kernel. To be more specific,
-\texttt{mmap} and \texttt{threads} cannot be recreated inside SafePOSIX without interaction with the kernel, since there has
-to be some basic operations to access the hardware. Therefore, in our design of Lind, \texttt{mmap} and \texttt{threads}
-are passed down to the kernel, and any vulnerabilities related to them are  unavoidable.
+It should be noted that although the design of Lind only accesses popular paths in the kernel and implements SafePOSIX inside
+of a sandbox, there are a few fundamental building blocks for which Lind must rely on the kernel. For example,
+\texttt{mmap} and \texttt{threads} cannot be recreated inside SafePOSIX without interaction with the kernel, since there have
+to be some basic operations to access the hardware. Therefore, Lind passes \texttt{mmap} and \texttt{threads}
+directly to the kernel, and any vulnerabilities related to them are unavoidable.
 CVE-2014-4171 is a bug triggered by \texttt{mmap} inside Lind. It was also triggered inside Docker, LXC, and Graphene, indicating
 that those systems rely on the kernel to perform \texttt{mmap} operations as well.
 
 Our initial results suggest that bugs are usually triggered by extensive interaction with the unpopular paths in the kernel through
 complex system calls, or basic system calls
 with complicated or rarely used flags. The \emph{Lock-in-Pop} design, and thus Lind,
-provides strictly controlled access to the kernel, and so, poses
+provides strictly controlled access to the kernel, and so poses
 the least risk.
 
 %To test if a bug could be triggered, we created or located C
@@ -378,12 +378,12 @@ and further analyzed the components of those traces. These results,
 shown in Table \ref{table:trace-systems}, affirm that Lind accessed the
 least amount of code in the OS
 kernel. More importantly, all the kernel code it did access was in the
-popular kernel paths that contain fewer bugs (Section~{\ref{Verification-of-Hypothesis}}).
+popular kernel paths, which contain fewer bugs (Section~{\ref{Verification-of-Hypothesis}}).
 A large portion of the kernel paths accessed by Lind lie in
-\texttt{fs/} to perform file system operations.
+\texttt{fs/} and perform file system operations.
 To restrict file system calls to popular paths, Lind allows only basic calls,
 like \texttt{open()}, \texttt{close()}, \texttt{read()}, \texttt{write()}, \texttt{mkdir()},
-\texttt{rmdir()}, and permits only commonly-used flags like \texttt{O\_CREAT}, \texttt{O\_EXCL},
+and \texttt{rmdir()}, and permits only commonly-used flags like \texttt{O\_CREAT}, \texttt{O\_EXCL},
  \texttt{O\_APPEND}, \texttt{O\_TRUNC},
 \texttt{O\_RDONLY}, \texttt{O\_WRONLY}, and \texttt{O\_RDWR}
 for \texttt{open()}.
@@ -392,7 +392,7 @@ The other virtualization systems all accessed a substantial number of code
 paths in the kernel, and they all accessed a larger section from the unpopular
 paths. This is because they rely on the underlying host kernel to implement
 complex functionality. Therefore, they are more dependent on complex system
-calls, and allow extensive use of complicated flags.  For example, Graphene's
+calls, and allow extensive use of complicated flags. For example, Graphene's
 system call API supports multiple processes via \texttt{fork()} and signals,
 and therefore accesses many risky lines of code.
 For basic and frequently-used system calls like \texttt{open},
@@ -445,13 +445,13 @@ inside the sandbox.
 The results are shown in Table \ref{table:trace-Repy}.
 The trace of Repy is slightly larger (5.8\%) than that of Lind.
 This larger design does not allow attackers or bugs to
-access the risky paths in the OS kernel, and it leaves open only a small amount of
+access the risky paths in the OS kernel, and it leaves open only a small number of
 additional popular paths. These are added because some functions in Repy
 have more capabilities for message sending and network connection than Lind's
 system call interface.
 For example, in Repy, the
 \texttt{sendmessage()} and \texttt{openconnection()}
-functions could reach out to more lines of code when fuzzed. However, the kernel
+functions could reach more lines of code when fuzzed. However, the kernel
 trace of Repy still lies completely within the popular paths that
 contain fewer kernel bugs. Thus, the Repy sandbox kernel
 has only a very slim chance of triggering OS kernel bugs.
@@ -479,7 +479,7 @@ our main purpose for building the prototype.
 \textbf{Setup.}
 %To test the execution time overhead in Lind for running real-world applications,
 We ran a few programs of different types to understand Lind's performance
-impact.  All applications ran unaltered and correctly in Lind. To run the
+impact. All applications ran unaltered and correctly in Lind. To run the
 applications, it was sufficient to just recompile the unmodified
 source code using NaCl's compiler and Lind's \texttt{glibc} to call
 into SafePOSIX.
@@ -491,7 +491,7 @@ a prime number calculator Primes 1.0,
 GNU Grep 2.9, GNU Wget 1.13, GNU Coreutils 8.9,
 GNU Netcat 0.7.1, and K\&R Cat.
 We also ran more extensive benchmarks on two large legacy applications,
-Tor 0.2.3 and Apache 2.0.64 in Lind.
+Tor 0.2.3 and Apache 2.0.64, in Lind.
 %Both Tor and Apache were recompiled with NaCl's compiler and ran in Lind.
 We used Tor's built-in benchmark program and Apache's benchmarking tool
 \texttt{ab} to perform basic testing operations and record the execution time.
@@ -525,7 +525,7 @@ The Primes application run in Lind has a 6\% performance overhead.
 %Native Linux. CPU bound applications, like the Primes, engender little overhead,
 %because they run only in the NaCl sandbox. No system calls are
 %required, and there is no need to go through the SafePOSIX interface.
-The small amount of overhead is generated by NaCl's instruction alignment at building time.
+The small amount of overhead is generated by NaCl's instruction alignment at build time.
 %Another contributor to the overhead is that the instructions built by NaCl
 %have a higher rate of cache misses, which can slowdown the
 %program.
@@ -574,7 +574,7 @@ Linux vs. Lind.}
 
 A summary of the results for Tor is shown in Table \ref{table:performance_tor}. The
 benchmarks focus on cryptographic operations,
-which are CPU intensive, but also make system calls like \texttt{getpid}, and reads to
+which are CPU intensive, but they also make system calls like \texttt{getpid} and reads to
 \texttt{/dev/urandom}.
 The digest operations time the access of a map of message digests.
 The AES operations time includes encryptions of several sizes and the creation of
@@ -593,7 +593,7 @@ Performance overhead in Lind is reasonable, considering that
 we did not specifically optimize any part of the code to improve speed.
 It should also be noted that performance slowdown is common in virtualization systems.
 For example, Graphene \cite{Graphene-14} also shows an overhead ranging from
-1.4x to 2x when running applications such as the Apache web server and Unixbench suite \cite{UnixBench}.
+1.4x to 2x when running applications such as the Apache web server and the Unixbench suite \cite{UnixBench}.
 In many cases, Lind shares the same magnitude of slowdown with Graphene.
 %Since an attack on the kernel can have devastating
 %consequences, %at this initial stage,
