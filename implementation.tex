@@ -3,10 +3,10 @@
 
 To test our \lip design, we used it to implement a secure virtual machine
 called Lind\footnote{\scriptsize Lind is an old English word for a lightweight, but still strong shield
-constructed from two layers of linden wood.}.  Lind is divided into a
+constructed from two layers of linden wood.}. Lind is divided into a
 \emph{computational module} that enforces software fault isolation (SFI) and a
 \emph{SafePOSIX module} that safely re-creates OS functionality needed by user
-applications.  We use a slightly modified version of Native Client
+applications. We use a slightly modified version of Native Client
 (NaCl)~\cite{NaCl-09} for the computational module; the SafePOSIX is
 implemented using Restricted Python (Repy)~\cite{Repy-10}, to support
 complex user applications without exposing potentially risky kernel paths.

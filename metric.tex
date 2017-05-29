@@ -1,7 +1,7 @@
 \section{Developing a Quantitative Metric for Evaluating Kernel Security}
 \label{sec.metric}
 
-If we know which lines of code in the kernel are likely to contain zero-day
+If we knew which lines of code in the kernel are likely to contain zero-day
 bugs, we could try to avoid using them in an OSVM.
 %By understanding how lines of code in the kernel are used, we can better predict their
 %likelihood to contain security flaws.
@@ -46,11 +46,10 @@ code are executed when an application runs.
 \textbf{Popular kernel paths.}
 To capture the popular kernel paths, we used two strategies concurrently.
 First, we attempted to capture the normal usage behavior of popular applications.
-To do this, two students used applications for Debian 7.0 , a widely-used and popular open source project
-that Popularity Contest~\cite{Top-Packages} has deemed one of the 50 most popular Debian
-packages (omitting libraries, which are automatically included by packages that
-depend on them). Each student used 25 applications for their
-tasks (i.e., writing, spell checking, printing in a text editor, or using
+To do this, two students used applications from the 50 most popular 
+packages in Debian 7.0 (omitting libraries, which are automatically included by packages that
+depend on them) according to the Debian Popularity Contest~\cite{Top-Packages}, which tracks the usage of Debian packages on an opt-in basis. Each student used 25 applications for their
+tasks (e.g., writing, spell checking, printing in a text editor, or using
 an image processing program).
 %In instances where there were two applications that performed a
 %similar task (i.e., Mozilla Firefox and Google Chrome), both programs were
@@ -62,18 +61,18 @@ The second strategy was to capture the total range of applications an
 individual computer user might regularly access. The students used the workstation as their
 desktop machine for a one-week period. They did their homework, developed
 software, communicated with friends and family, and so on, using this
-system.  Software was installed as needed.
+system. Software was installed as needed.
 %
 From these two strategies, we obtained a profile of the lines of
-kernel code that defined our popular kernel paths.  We make this trace
-publicly available to other researchers \cite{Lind}, so they may analyze or
+kernel code that defined our popular kernel paths. We make these traces
+publicly available to other researchers~\cite{Lind}, so they may analyze or
 replicate our results.
 
 \noindent
 \textbf{Reachable kernel paths.}
 There are certain paths in the kernel, such as unloaded drivers, that are
 unreachable and unused.
-To determine which paths are unreachable, we used two techniques.  First,
+To determine which paths are unreachable, we used two techniques. First,
 we performed system call fuzzing with the Trinity
 system call fuzz tester~\cite{Trinity}.
 %These included 16 child processes
@@ -97,7 +96,7 @@ For each bug, we found the patch that fixed the problem and identified
 which lines of kernel code were modified to remove it.
 For the purpose of this study, a user program that can execute a line of kernel
 code changed by such a patch is considered to have the \textit{potential to
-exploit that flaw}.  Note that it is possible that, in some situations,
+exploit that flaw}. Note that it is possible that, in some situations,
 this will over-estimate the exploitation potential because reaching the lines of kernel code where a
 bug exists does not necessarily imply a reliable, repeatable capability to
 exploit the bug.
@@ -146,13 +145,13 @@ We first divided the kernel into two sets,
 $A$ and $B$, where bugs occur at rates $\lambda_A$ and
 $\lambda_B$, and $\lambda_A \neq \lambda_B$. In this test, $A$ represents the popular
 paths in the kernel, while $B$
-addresses the less commonly-used paths. Given the null-hypothesis
+addresses the less commonly-used paths. Given the null hypothesis
 that the rate of defect occurrences is the \textit{same} in set $A$ and $B$
 (or bugs in $A$ and $B$ are drawn from the same Poisson distribution),
 we used the Uniformly Most Powerful Unbiased (UMPU) test~\cite{shiue1982experiment}
 to compare unequal-sized code blocks.
 At a significance level of $\alpha=0.01$, the test was significant at
-$\rho=0.0015$, rejecting the null-hypothesis.
+$p=0.0015$, rejecting the null hypothesis.
 The test also reported a 95\% confidence that $\lambda_A / \lambda_B
 \in [0.002, 0.525]$. This indicates that the ratio between the bug rates is well
 below 1. Since $B$ has a bug rate much larger than that of $A$,
@@ -198,15 +197,15 @@ virtualization system,
 as no system could run very long exclusively on old code.
 
 Another metric, reported by Chou, et al.~\cite{PittSFIeld}, showed that certain parts of the kernel,
-device drivers in particular, were more vulnerable than others (metric 2).
+particularly device drivers, were more vulnerable than others (metric 2).
 %In particular, they identified that device drivers have much more vulnerabilities.
 Applying this metric on our dataset, we found that the driver code in our version
 of the Linux kernel accounted for only 8.9\% of the total codebase, and contained
-merely 4 out of the 40 bugs (Figure \ref{fig:bug_density}).
-One reason for this is that, after Chou's study was published, system
+just 4 out of the 40 bugs (Figure \ref{fig:bug_density}).
+One reason for this is that after Chou's study was published system
 designers focused efforts on improving driver code. Palix \cite{palix2011faults}
 found that %with development of the Linux kernel,
-\texttt{drivers} now have lower fault rate than other directories,
+\texttt{drivers} now has a lower fault rate than other directories,
 such as \texttt{arch} and \texttt{fs}.
 %However, this metric also proves to be difficult to use with the
 %Linux kernel, since our results show that
@@ -228,7 +227,7 @@ flaws, indicating the need to localize bugs at a finer granularity.
 %We now discuss two such metrics, and use our Linux kernel version and 40 bugs dataset
 %to conduct a comparison between them and our popular-paths metric.
 
-To summarize, we demonstrated that previously proposed security
+To summarize, our results demonstrate that previously proposed security
 metrics show only weak correlation between the occurrence of bugs
 and the type of code they target. In contrast, our metric (metric 3)
 provides an effective and statistically significant

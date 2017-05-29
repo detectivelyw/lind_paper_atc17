@@ -50,7 +50,7 @@ we find our ``popular paths'' metric is much more effective
 This key information inspired the idea that if we could design virtual machines
  that use only ``popular kernel paths,'' a strategy we have dubbed \lip,
 it would greatly increase resilience to zero-day bugs in the host OS kernel.
-Yet, using such a design scheme creates a few challenges that would need to be
+Yet using such a design scheme creates a few challenges that would need to be
  overcome. These include:
 
 \begin{itemize}
@@ -78,17 +78,17 @@ the small (8K LOC) sandbox kernel of Repy isolates flaws in SafePOSIX
 to prevent them from allowing direct access to the host OS kernel.
 
 To test the effectiveness of Lind and our ``popular paths'' metric,
-we replicate 35 kernel bugs discovered in Linux kernel version 3.14.1.  We attempt
+we replicated 35 kernel bugs discovered in Linux kernel version 3.14.1. We attempted
 to trigger those bugs in Lind and three other virtualized environments,
 including Docker~\cite{Docker}, LXC~\cite{LXC}, and Graphene~\cite{Graphene-14}.
 In this study, our evaluation was focused on comparing operating-system-level virtualization containers, such as Docker and LXC,
 and library OSes, such as Graphene.
-We exclude comparison with bare-metal hypervisors~\cite{Xen-03, VMWare-Server},
+We excluded bare-metal hypervisors~\cite{Xen-03, VMWare-Server},
 hardware-based virtualization~\cite{IntelVT, keller2010nohype} and full virtualization
 virtual machines, such as VirtualBox \cite{VirtualBox}, VMWare Workstation \cite{VMWare-Workstation}, and QEMU \cite{QEMU}.
 While our ``popular paths'' metric may potentially apply to those
 systems, a direct comparison is not possible since they have different
-ways of accessing hardware resources, and would require different measuring approaches.
+ways of accessing hardware resources, and would require different measurement approaches.
 
 Our results show that applications in Lind are substantially less likely to trigger kernel bugs.
 By doing so, we demonstrate that forcing an application to use only popular
