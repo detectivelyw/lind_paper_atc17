@@ -72,7 +72,7 @@ All together, we identified a total of 35 bugs that we were able to trigger from
 
 We then evaluated the protection afforded by four virtualization systems (including Lind) by attempting to trigger the 35 bugs from inside each one.
 The host system for each test ran a version of Linux 3.14.1 with gcov instrumentation enabled.
-For the nine bugs that we could trigger directly, we ran the proof of concept exploit inside the guest.
+For the nine bugs that we could trigger directly, we ran the proof-of-concept exploit inside the guest.
 For the other 26, we ran the Trinity fuzzer inside the guest, exercising each system call 1,000,000 times with random inputs.
 Finally, we checked whether the lines of code containing each bug were reached in the host kernel,
 indicating that the guest could have triggered the bug.
