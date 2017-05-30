@@ -91,8 +91,7 @@ as ``functionality re-creation."
 The key to this design is to not fully rely on the underlying
 kernel for system functions, but to re-create its own system functionality.
 %As illustrated in Figure \ref{fig:design_functionality_reimplementation},
-This design  %communicate with the kernel to
-When it has access to resources, like memory, CPU, and disk storage, the system
+When it has to access resources, like memory, CPU, and disk storage, the system
 accesses the kernel directly with its underlying TCB code.
 %which can access the kernel directly.
 %For example, Graphene \cite{Graphene-14} re-creates its own Linux system calls
@@ -132,7 +131,7 @@ Recall that we want to show that the ``popular paths'' metric can be used in pra
 We do so by devising a design
 in which all code, including the complex part
 of the operating system interface, accesses only
-``popular kernel paths'' through a small TCB. As it ``locks" all functionality
+popular kernel paths through a small TCB. As it ``locks" all functionality
 requests into only the ``popular paths,'' we call this design \lip.
 
 \begin{figure}%[h]
