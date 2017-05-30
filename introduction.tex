@@ -14,7 +14,7 @@ like Docker \cite{Docker} or LXC \cite{LXC} should
 prevent bugs in the host OS kernel from triggering.
 However, the isolation provided by such systems is not the whole answer and
 faces some significant drawbacks.
-To be effective, OSVM's software must not contain any bugs that could allow
+To be effective, the OSVM's software must not contain any bugs that could allow
 the program to escape the machine's containment and interact directly with the host OS.
 Unfortunately, these issues are very common in OSVMs, with 14 CVE vulnerabilities
 confirmed for Docker \cite{Docker-Vulnerabilities} since 2014.
@@ -28,7 +28,7 @@ as to which parts of the host kernel can be safely exported to user programs.
 
 Several attempts have been made to find a reliable metric to pinpoint where bugs
  are most likely to be in kernel code.
-A number of previous studies have suggested that older code may be more vulnerable
+A number of previous studies have suggested that older code may be less vulnerable
  than new code \cite{ozment2006milk}
 or that certain parts (such as device drivers) of the kernel \cite{PittSFIeld}
 may be more bug-prone than others.
@@ -55,7 +55,7 @@ Yet using such a design scheme creates a few challenges that would need to be
 
 \begin{itemize}
 \item It might not be possible in real-life codebases to completely avoid ``unpopular paths.''
-If other applications, or future versions of the applications we tested, frequently require the use of ``unpopular paths,'' would this make our metric untenable?
+If other applications, or future versions of applications we tested, frequently require the use of ``unpopular paths,'' would this make our metric untenable?
 (Section~{\ref{lock-in-pop}})
 \item The exploits that adversaries use change over time. Could our observation that ``popular paths'' are safer be only an artifact of when we did our measurements,
 and not be predictive of future exploits? (Section~{\ref{Verification-of-Hypothesis}})
@@ -75,7 +75,7 @@ It also passes system calls invoked by the program to the operating system inter
 SafePOSIX re-creates the broader POSIX functionalities needed by applications, while being contained within the Repy sandbox.
 An API in the sandbox only allows access to popular kernel paths, while
 the small (8K LOC) sandbox kernel of Repy isolates flaws in SafePOSIX
-to prevent them from allowing direct access to the host OS kernel.
+to prevent them from directly accessing the host OS kernel.
 
 To test the effectiveness of Lind and our ``popular paths'' metric,
 we replicated 35 kernel bugs discovered in Linux kernel version 3.14.1. We attempted
